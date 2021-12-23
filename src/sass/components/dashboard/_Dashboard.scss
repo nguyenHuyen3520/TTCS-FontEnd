@@ -1,0 +1,11 @@
+.Dashboard{
+    &__container{
+        display: flex;
+
+        & > div.other{
+            flex: 4;
+            background-color:red;
+        }
+    }
+}
+

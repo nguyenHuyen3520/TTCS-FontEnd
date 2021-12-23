@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.5.6",
+    "@apollo/react-hooks": "^4.0.0",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@material-ui/icons": "^4.11.2",
@@ -15,10 +16,14 @@
     "graphql": "^16.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.0",
     "recharts": "^2.1.8",
     "sass": "^1.45.1",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^2.0.4",
+    "swiper": "^7.3.4",
     "web-vitals": "^2.1.2"
   },
   "scripts": {

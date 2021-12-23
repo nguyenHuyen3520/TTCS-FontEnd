@@ -1,0 +1,35 @@
+.Slider {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 25px;
+  &__left {
+    width: 640px;
+    max-width: 100%;
+    color: #fff;
+    font-size: 1.6rem;
+    line-height: 1.6;
+    padding: 0 36px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0;
+    & > h2 {
+      color: #fff;
+      font-size: 3.2rem;
+      line-height: 1.5;
+      font-weight: 900;
+    }
+    & > p {
+      max-width: 600px;
+      margin-top: 0;
+      margin-bottom: 24px;
+    }
+  }
+
+  &__right{
+    
+
+  }
+}

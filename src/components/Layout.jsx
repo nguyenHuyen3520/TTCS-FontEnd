@@ -13,15 +13,12 @@ const Layout = () => {
     return (
         <BrowserRouter>
             <Route render={props => (
-                <div>
-                    <Header {...props} />
+                <div>                    
                     <div className="container">
                         <div className="main">
                             <Routes />
                         </div>
-                    </div>
-                    {/* <Footer />
-                    <ProductViewModal /> */}
+                    </div>                    
                 </div>
             )} />
         </BrowserRouter>

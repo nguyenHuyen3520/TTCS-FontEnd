@@ -105,6 +105,7 @@ html {
   transition-property: color;
   transition-duration: 0.3s;
   text-transform: capitalize;
+  // text-align: center;
 }
 .header__inner--ful-width {
   height: 462.6px;
@@ -964,6 +965,18 @@ html {
 .header__navbar-item:focus-within .header__inner,
 .header-cart:hover .header-cart--inners,
 .header-cart:focus .header-cart--inners,
+.header__account:focus .header-cart--inners,
+.header__account:hover .header-cart--inners,
+.header__account:focus-within .header-cart--inners {
+  display: flex;
+  visibility: visible;
+  opacity: 1;
+  z-index: 1;
+  transform: translateY(0);
+  transition-delay: 0s, 0s, 0.3s;
+  transition: all 0.5s ease-out 0s, visibility 2s ease-in 0s,
+    z-index 0s linear 0.01s;
+}
 .header-cart:focus-within .header-cart--inners {
   display: flex;
   visibility: visible;
@@ -1077,6 +1090,19 @@ html {
   display: flex;
   align-items: center;
   height: 100%;
+}
+.header__account {
+  width: 24px;
+  color: var(--white-color);
+  position: relative;
+  margin-right: 30px;
+}
+.header__account:hover .header-cart__link {
+  color: var(--primary-color);
+
+}
+.header__account:hover .header-cart--inners {
+  display: block;
 }
 .header-cart {
   position: relative;
@@ -1357,7 +1383,7 @@ html {
   position: relative;
   width: 100%;
   height: 600px;
-//   background-image: url(../img/1.jpg);
+  background-image: url(../../assets/img/1.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   animation: slide 20s infinite, FadeIn 0.4s linear;
@@ -1373,20 +1399,20 @@ html {
     transform: scale(1.4);
   }
 }
-// @keyframes slide {
-//   25% {
-//     background-image: url(../img/1.jpg);
-//   }
-//   50% {
-//     background-image: url(../img/2.jpg);
-//   }
-//   75% {
-//     background-image: url(../img/3.jpg);
-//   }
-//   100% {
-//     background-image: url(../img/4.jpg);
-//   }
-// }
+@keyframes slide {
+  25% {
+    background-image: url(../../assets/img/1.jpg);
+  }
+  50% {
+    background-image: url(../../assets/img/2.jpg);
+  }
+  75% {
+    background-image: url(../../assets/img/3.jpg);
+  }
+  100% {
+    background-image: url(../../assets/img/4.jpg);
+  }
+}
 .banner-text {
   position: absolute;
   color: var(--white-color);
@@ -1519,7 +1545,7 @@ html {
   cursor: pointer;
 }
 .tours-img-main {
-  /* background-image: url(../img/5.jpg); */
+  background-image: url(../../assets/img/5.jpg); 
   height: 154px;
   background-repeat: no-repeat;
   background-size: 100% auto;

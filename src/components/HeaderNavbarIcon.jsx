@@ -1,9 +1,66 @@
 import React, { Component } from 'react';
-
+import { Link } from "react-router-dom"
 class HeaderNavbarIcon extends Component {
   render() {
     return (
       <div className="header__navbar-icon">
+      <div className="header__account">
+      <a href className="header-cart__link">
+    <svg
+      version="1.1"
+      x="0px"
+      y="0px"
+      viewBox="0 0 23 23"
+      enableBackground="new 0 0 23 23"
+      xmlSpace="preserve"
+    >
+      <g>
+        <path
+          fill="currentColor"
+          d="M11.5,14.1c-2.2,0-4-1.8-4-4c0-2.2,1.8-4,4-4s4,1.8,4,4C15.5,12.3,13.7,14.1,11.5,14.1z M11.5,7.3
+                    c-1.6,0-2.8,1.3-2.8,2.8c0,1.6,1.3,2.8,2.8,2.8s2.8-1.3,2.8-2.8C14.3,8.5,13,7.3,11.5,7.3z"
+        />
+        <path
+          fill="currentColor"
+          d="M11.5,23c-3.1,0-5.9-1.2-8.1-3.4c-2.2-2.2-3.4-5-3.4-8.1s1.2-5.9,3.4-8.1c2.2-2.2,5-3.4,8.1-3.4
+                    s5.9,1.2,8.1,3.4c2.2,2.2,3.4,5,3.4,8.1s-1.2,5.9-3.4,8.1C17.4,21.8,14.5,23,11.5,23z M11.5,1.2C5.8,1.2,1.2,5.9,1.2,11.5
+                    s4.6,10.3,10.3,10.3s10.3-4.6,10.3-10.3S17.1,1.2,11.5,1.2z"
+        />
+        <path
+          fill="currentColor"
+          d="M11.5,23c-1.5,0-2.9-0.3-4.2-0.8c-0.2-0.1-0.4-0.3-0.4-0.6v-5.3c0-1.8,1.5-3.3,3.3-3.3h2.6
+                    c1.8,0,3.3,1.5,3.3,3.3v5.3c0,0.2-0.1,0.5-0.4,0.6C14.4,22.7,12.9,23,11.5,23z M8.1,21.2c1.1,0.4,2.2,0.6,3.4,0.6s2.3-0.2,3.4-0.6
+                    v-4.9c0-1.2-0.9-2.1-2.1-2.1h-2.6c-1.2,0-2.1,0.9-2.1,2.1V21.2z"
+        />
+      </g>
+    </svg>
+    </a>
+    <div className="header-cart--inners">
+    <ul className="header__inner-list">
+                            <li className="header__inner-item">
+                                <Link to="#" className="header__inner-link">
+                                    Log In
+                                </Link>
+                            </li>
+                            <li className="header__inner-item">
+                                <Link to="#" className="header__inner-link">
+                                    Register
+                                </Link>
+                            </li>
+                            <li className="header__inner-item">
+                                <Link to="#" className="header__inner-link">
+                                    Contact Us
+                                </Link>
+                            </li>
+                            <li className="header__inner-item">
+                                <Link to="#" className="header__inner-link">
+                                    Coming Soon
+                                </Link>
+                            </li>
+                            
+                        </ul>
+    </div>
+      </div>
         <div className="header-cart">
           <a href className="header-cart__link">
             <svg

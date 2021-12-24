@@ -1,3 +1,5 @@
+
+import '../assets/font/fontawesome-free-5.15.4-web/fontawesome-free-5.15.4-web/css/all.min.css';
 import { Link, useLocation } from 'react-router-dom'
 import Helmet from "../components/Helmet"
 import Slider from "../components/Slider"

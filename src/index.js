@@ -5,11 +5,21 @@ import "./sass/index.scss"
 import "swiper/css";
 import "swiper/css/pagination"
 import "swiper/css/navigation"
-
-
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+} from "@apollo/client";
+const client = new ApolloClient({
+  uri: 'http://localhost:4000/graphql',
+  cache: new InMemoryCache()
+});
 ReactDOM.render(
   <React.StrictMode>
-    <Layout />
+    <ApolloProvider client={client}>
+      <Layout />
+
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

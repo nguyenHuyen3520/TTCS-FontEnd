@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import Helmet from "../components/Halmet"
+import Helmet from "../components/Helmet"
 import Slider from "../components/Slider"
 import { Swiper, SwiperSlide } from "swiper/react";
 import image from "../assets/image/catalog/Banner_ReactJS.png"

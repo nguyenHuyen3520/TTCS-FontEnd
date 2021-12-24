@@ -3,37 +3,29 @@ import { Form, Button } from 'semantic-ui-react'
 import Helmet from "../components/Helmet"
 import gql from 'graphql-tag'
 import {useMutation} from '@apollo/react-hooks'
-import { useHistory } from "react-router-dom";
-const Register = () => {
-    const history = useHistory();
-    const [values, setValue] = React.useState({
+const Login = () => {
+    const [values, serValue] = React.useState({
         userName: "",
         password: "",
         email: "",
         confirmPassword: "",
-        role: 1
     })
     const onSubmit = (event) => {
         event.preventDefault();
-        addUser();
-        console.log(data);
-        history.push("/home?",data)
+        console.log(values);
+        // addUser();
     }
 
-    const [addUser, {data, loading}] = useMutation(REGISTER_USER, {
-        update(proxy, result) {
-            console.log(result)
-        },
-        variables: {
-            name: values.userName,
-            email: values.email,
-            password: values.password,
-            role: 1
-        }
-    })
+    
+    // const [addUser, {loading}] = useMutation(LOGIN_USER, {
+    //     update(proxy, result) {
+    //         console.log(result)
+    //     },
+    //     variables: values
+    // })
     
     const onChange = (event) => {
-        setValue({...values, [event.target.name]: event.target.value})
+        serValue({...values, [event.target.name]: event.target.value})        
     }
     return (
 
@@ -80,14 +72,13 @@ const Register = () => {
     )
 }
 
-const REGISTER_USER = gql `
+const LOGIN_USER = gql `
     mutation createUser(
         $name: String!
         $email: String!
-        $password: String!    
-        $role: Int    
+        $password: String!
     ){
-        id name
+        id name 
     }
 `
-export default Register
+export default Login

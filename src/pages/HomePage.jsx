@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import Helmet from "../components/Halmet"
+import Helmet from "../components/Helmet"
 import Banner from '../components/Banner';
 import BannerBtn from '../components/BannerBtn';
 import SectionWrapper from '../components/SectionWrapper';

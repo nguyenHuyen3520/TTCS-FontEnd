@@ -1,39 +1,51 @@
-import React, { useRef, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-
-import HeaderNavbarLogo from './HeaderNavbarLogo';
-import HeaderNavbarList from './HeaderNavbarList';
-import HeaderNavbarIcon from './HeaderNavbarIcon';
-
-const mainNav = [
-    {
-        display: "Trang chủ",
-        path: "/"
-    },
-    {
-        display: "Sản phẩm",
-        path: "/catalog"
-    },
-    {
-        display: "Phụ kiện",
-        path: "/accessories"
-    },
-    {
-        display: "Liên hệ",
-        path: "/contact"
-    }
-]
-
+import React, { useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Image from './Image'
+import SearchIcon from '@mui/icons-material/Search';
 const Header = () => {
-
+    const [isLogin, setIsLogin] = useState(true);
+    const path = useParams();
     return (
-        <header className="header grid">
-            <nav className="header__navbar">
-                <HeaderNavbarLogo />
-                <HeaderNavbarList />                
-                <HeaderNavbarIcon />
-            </nav>
-        </header>
+        <div style={{ backgroundColor: "#7254b0", color: "#fff" }}>
+            {
+                path !== 'login' | path !== 'signup' ? (
+
+                    <div className="header">
+                        <div className="header__left">
+                            <Link to="/">
+                                <Image />
+                            </Link>
+                        </div>
+                        <div className="header__right">
+                            <div className="header__right__search">
+                                <form>
+                                    <input type="text" placeholder="Enter keys" />
+                                    <div className="header__right__search__icon">
+                                        <SearchIcon/>
+                                    </div>
+                                </form>
+                            </div>
+                            <div>
+                                {
+                                    isLogin ? (
+                                        <div style={{cursor: 'pointer'}}>
+                                            <AccountCircleIcon fontSize="large" />
+                                        </div>
+                                    ) : (
+                                        <Link to={"/login"}>
+                                            <div className="header__button">
+                                                Đăng Nhập
+                                            </div>
+                                        </Link>
+                                    )
+                                }
+                            </div>
+                        </div>
+                    </div>
+                ) : null
+            }
+        </div>
     )
 }
 

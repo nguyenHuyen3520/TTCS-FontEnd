@@ -1,0 +1,34 @@
+.Admin{
+    display: flex;
+    font-size: 16px;
+    &__left{
+        height: 1000px;
+        width: 300px;
+        background-color: #48525f;
+        color: #fff;
+        font-size: 20px;
+        & > div{
+            padding: 20px;
+        }
+        &> div.active{
+            background-color: black;
+            border-radius: 10px;            
+          }
+    }
+
+    &__right{
+        width: 100%;
+        margin: 20px;
+    }
+    a{
+        text-decoration: none;
+        color: #fff;
+    }
+    table, th, td{
+        border:1px solid black;
+        padding: 20px;        
+    }
+    table{
+        border-collapse:collapse;
+    }
+}

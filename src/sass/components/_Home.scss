@@ -1,3 +1,84 @@
-.main-content{
-    display: flex;
+.Home {
+  width: 1802px;
+  &__homeHero {
+    position: relative;
+    height: 60vh;
+    background-size: cover;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+      url("../../assets/image/home-hero.jpg");
+    background-position: 65% 50%;
+    background-attachment: fixed;
+    width: 100%;
+
+    &__text {
+      position: absolute;
+      top: 40%;
+      left: 10%;
+      color: white;
+      & > h4 {
+        font-size: 2.0243rem;
+        margin: 0;
+        padding: 10px;
+      }
+      & > h5 {
+        margin: 0;
+        font-size: 1rem;
+        padding: 10px;
+      }
+      & > button {
+        margin-left: 10px;
+        padding: 5px 10px;
+        background-color: #303f9f;
+        color: white;
+        border: 1px solid #303f9f;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__section1 {
+    color: white;
+    position: relative;
+    background: linear-gradient(120deg, #2980b9, #8e44ad);
+    min-height: 30vh;
+    &__child1 {
+      padding: 30px 10px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &__icons {
+        height: 45px;
+        width: 45px;
+        border-radius: 50%;
+        background-color: #e67e22;
+        display: flex;
+        margin-right: 10px;
+        & > .icon {
+          width: 100%;
+          height: 60%;
+          margin-top: 10px;
+          font-size: 1rem;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+
+  &__section2 {
+    padding: 10px 30px;
+    height: 500px;
+    background-color: #303030;
+    color: white;
+  }
+
+  &__section3 {
+    height: 480px;
+    width: 100%;
+    color: white;
+    position: relative;
+    background: linear-gradient(120deg, #2980b9, #8e44ad);    
+  }
 }

@@ -2,8 +2,11 @@
     height: 70px;
     display: flex;
     justify-content: space-between;
-    padding: 0 20px;
-
+    padding: 0 20px;    
+    &__left{
+        line-height: 70px;
+        cursor: pointer;
+    }
     &__right{
         font-size: 23px;    
         display: flex;
@@ -21,12 +24,10 @@
                 width: 150px;
                 padding: 5px;
                 padding-left: 30px;
+                outline: none;
+                border-radius: 5px;
             }
 
-            & > form > input:focus {
-                box-shadow: none;
-                border: none;
-            }
             & > form > input:focus{
                 width: 300px;
             }

@@ -1,5 +1,7 @@
 import axiosClient from "./axiosClient";
-
+const header= {
+    Authorization: "Bearer "+localStorage.getItem("accessToken")
+}
 const userApi = {
     getAll: (params)=>{
         const url = "/users";
@@ -20,6 +22,11 @@ const userApi = {
     login: (params)=>{
         const url = "/login";
         return axiosClient.post(url, params);
+    },
+    getProfile: ()=>{
+        const url = "/profile";
+        console.log(header)
+        return axiosClient.get(url, header);
     }
 
 }

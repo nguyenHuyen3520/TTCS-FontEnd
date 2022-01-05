@@ -34,8 +34,8 @@ const Signup = () => {
         validationSchema: validationSchema,
         onSubmit: (values) => {
             const signup = async () => {
-                const response = await userApi.signup(values);                
-                
+                const response = await userApi.signup(values);
+
             }
             signup();
 
@@ -47,7 +47,7 @@ const Signup = () => {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "100px" }}>
                 <div>
 
-                    <h1>Register</h1>
+                    <h1 className="font-bold text-5xl text-center mb-2">Register</h1>
                     <form onSubmit={formik.handleSubmit}>
                         <TextField
                             fullWidth

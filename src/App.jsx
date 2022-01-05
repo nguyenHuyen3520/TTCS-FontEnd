@@ -6,7 +6,7 @@ import Routes from './routes/Routes'
 
 const App = () => {
   React.useEffect(() => {
-    const accsessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem('accessToken');
     console.log("da di qua day");
   }, [])
   return (
@@ -18,7 +18,9 @@ const App = () => {
             <Route render={props => (
               <div className="main-content">
                 <Navigate />
-                <Routes />
+                <div className="w-full">
+                  <Routes />
+                </div>
               </div>
             )} />
           </div>

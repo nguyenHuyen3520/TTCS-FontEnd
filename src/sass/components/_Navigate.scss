@@ -1,15 +1,22 @@
 .Catalog {
-  display: flex;
+  display: flex;  
+  width: 100px;  
+  height: 100%;
   a{
     text-decoration: none;
     color: #000;
   }
   &__left {
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
+    padding: 20px;
     .active{
       background-color: #e8ebed;
       border-radius: 10px;      
+    }
+
+    &__txt{
+      display: none;
     }
   }
 

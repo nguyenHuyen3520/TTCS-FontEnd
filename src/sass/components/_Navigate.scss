@@ -55,3 +55,10 @@
     -webkit-line-clamp: 1;
   }
 }
+
+.navigate .active{
+  padding: 10px;
+  border: 1px solid;
+  background-color: red;
+  border-radius: 50%;
+}

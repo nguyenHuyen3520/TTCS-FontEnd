@@ -38,10 +38,10 @@ const Course = () => {
         getData();
     },[selected] )
     return (
-        <div >
-            <div className="mb-14 mt-5">
-                typeCourse
+        <div className="">
+            <div className="mb-8 mt-5 flex justify-center">
                 <div className="w-72">
+                    typeCourse
                     <Listbox value={selected} onChange={setSelected}>
                         <div className="relative mt-1">
                             <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm">
@@ -91,6 +91,11 @@ const Course = () => {
                             </Transition>
                         </div>
                     </Listbox>
+                </div>
+            </div>
+            <div className="flex justify-center font-bold text-xl mb-8 ">
+                <div className="border-2 p-1 rounded-2xl pr-7 pl-7">
+                    {listCourse.length} Course was found
                 </div>
             </div>
             <ListCourse listCourse={listCourse} col={7} />

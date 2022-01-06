@@ -29,7 +29,7 @@ const AdminApi = {
     },
     updateUser: (params)=>{
         const url= '/admin/update-user';
-        return axiosClient.put(url, params, header);
+        return axiosClient.patch(url, params, header);
     }
 }
 

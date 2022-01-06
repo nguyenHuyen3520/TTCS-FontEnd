@@ -35,8 +35,7 @@ const EditUser = ({ user }) => {
         validationSchema: validationSchema,
         onSubmit: (values) => {            
             const EditUser = async () => {
-                const response = await AdminApi.updateUser(values);
-                console.log("aaaa", response);
+                const response = await AdminApi.updateUser(values);                
             }
             EditUser();                      
         },

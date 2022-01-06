@@ -1,14 +1,18 @@
 .header{
-    height: 70px;
+    height: 50px;
     display: flex;
     justify-content: space-between;
-    padding: 0 20px;    
+    padding: 0 20px;   
+    z-index: 1; 
+    align-items: center;
+    justify-items: center  ;
     &__left{
-        line-height: 70px;
-        cursor: pointer;
+        line-height: 50px;
+        cursor: pointer;        
     }
+    
     &__right{
-        font-size: 23px;    
+        font-size: 16px;    
         display: flex;
         align-items: center;
 
@@ -20,22 +24,26 @@
             opacity: 0.8;
             position: relative;
             & > form > input{
-                width: 150px;
+                width: 250px;
                 padding: 5px;
                 padding-left: 30px;
                 outline: none;
                 border-radius: 5px;
-            }
-
-            & > form > input:focus{
-                width: 300px;
+                transition: 0.3s;
+                color: black;
+                background-color: rgba($color: rgba(250, 250, 250, 0), $alpha: 0.4);
+                &:focus{
+                    width: 320px;
+                }
             }
 
             &__icon{
                 position: absolute;
                 top: 20%;
-                color: black;
-                left: 10;
+                color: white;
+                justify-self: center;
+                display: flex;
+                padding: 0px 5px; 
             }
         }
     }
@@ -43,10 +51,17 @@
     &__button{
         display: flex;
         align-items: center;
-        padding: 0 10px;
-        background-color: "#f26339";        
+        padding: 0 10px;               
         border: 1px solid #e0e0e0;
-        background-color: "#f26339";
+        border-radius: 5px;
         cursor: pointer;
+        text-align: center;
+        transition: 0.4s;
+        font-size: 14px;
+
+        &:hover{
+            background-color: #d4b6f0; 
+            color: black;   
+        }
     }
 }

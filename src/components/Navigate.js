@@ -5,8 +5,7 @@ import { AiFillHdd } from "react-icons/ai";
 import { Link, useLocation } from 'react-router-dom'
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 
-const Navigate = () => {
-    console.log("aaaa");
+const Navigate = () => {    
     const { pathname } = useLocation()
     const [links, setLinks] = React.useState([
         {
@@ -20,15 +19,13 @@ const Navigate = () => {
             icon: <MenuBookIcon style={{ fontSize: '25px', color: 'black' }} />
         }
     ]);
-    const activeNav = links.findIndex(e => e.path === pathname)
-    console.log("links:", links);
+    const activeNav = links.findIndex(e => e.path === pathname)    
     const [isAdmin, setIsAdmin] = React.useState(false);
     React.useEffect(() => {
         const profile = JSON.parse(localStorage.getItem('profile'));
         if (profile) {
 
-            if (profile.typeUser === 'admin') {
-                console.log("ok admin")
+            if (profile.typeUser === 'admin') {                
                 setIsAdmin(true)
                 setLinks((state) => {
                     return [

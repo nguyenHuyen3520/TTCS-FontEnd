@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { Container } from '@mui/material';
-import AdminApi from '../api/AdminApi';
+import AdminApi from '../../api/AdminApi';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -23,34 +23,22 @@ const validationSchema = yup.object({
         .string('Enter your password')
         .min(8, 'Password should be of minimum 8 characters length')
         .required('Password is required'),
-    passwordConfirmation: yup.string()
-        .oneOf([yup.ref('password'), null], 'Passwords must match'),
     phone: yup
         .number().required('phone is required'),
     typeUser: yup.string(),
 });
 
-const CreateUser = () => {
+const EditUser = ({ user }) => {
     const history = useHistory()
     const formik = useFormik({
-        initialValues: {
-            userName: '',
-            email: '',
-            password: '',
-            passwordConfirmation: '',
-            phone: '',
-            typeUser: '',
-        },
+        initialValues: user,
         validationSchema: validationSchema,
-        onSubmit: (values) => {
-            console.log("value",values);
-            const CreateUser = async () => {
-                const response = await AdminApi.createUser(values);
+        onSubmit: (values) => {            
+            const EditUser = async () => {
+                const response = await AdminApi.updateUser(values);
                 console.log("aaaa", response);
             }
-            CreateUser();
-            history.push("/");
-            history.push("/admin-management-user");            
+            EditUser();                      
         },
     });
 
@@ -59,7 +47,7 @@ const CreateUser = () => {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "100px", width: "600px", color: 'black', backgroundColor: 'white', padding: '10px', marginLeft: '250px' }}>
                 <div>
 
-                    <h1 style={{ textAlign: 'center' }}>Add new user</h1>
+                    <h1 className="text-center font-bold text-3xl">Edit user</h1>
                     <form onSubmit={formik.handleSubmit}>
                         <TextField
                             fullWidth
@@ -94,17 +82,6 @@ const CreateUser = () => {
                         />
                         <TextField
                             fullWidth
-                            id="passwordConfirmation"
-                            name="passwordConfirmation"
-                            label="passwordConfirmation"
-                            type="password"
-                            value={formik.values.passwordConfirmation}
-                            onChange={formik.handleChange}
-                            error={formik.touched.passwordConfirmation && Boolean(formik.errors.passwordConfirmation)}
-                            helperText={formik.touched.passwordConfirmation && formik.errors.passwordConfirmation}
-                        />
-                        <TextField
-                            fullWidth
                             id="phone"
                             name="phone"
                             label="phone"
@@ -116,11 +93,10 @@ const CreateUser = () => {
                         <FormLabel component="legend">TypeUser</FormLabel>
                         <RadioGroup
                             aria-label="gender"
-                            defaultValue=""
                             name="typeUser"
-                            
+                            defaultValue={user.typeUser}
                         >
-                            <FormControlLabel onChange={formik.handleChange}  value="user" control={<Radio />} label="User" />
+                            <FormControlLabel onChange={formik.handleChange} value="user" control={<Radio />} label="User" />
                             <FormControlLabel onChange={formik.handleChange} value="admin" control={<Radio />} label="Admin" />
                         </RadioGroup>
                         <div style={{ marginTop: "10px" }}>
@@ -135,4 +111,4 @@ const CreateUser = () => {
     );
 };
 
-export default CreateUser
+export default EditUser

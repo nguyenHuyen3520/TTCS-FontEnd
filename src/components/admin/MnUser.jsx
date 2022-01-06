@@ -1,67 +1,18 @@
 import React from 'react'
-import { AiFillPlusCircle } from "react-icons/ai";
 import { FiEdit }from "react-icons/fi";
 import {AiFillDelete } from "react-icons/ai";
-import CreateUser from '../components/CreateUser';
-import AdminApi from '../api/AdminApi';
+import CreateUser from './CreateUser';
+import AdminApi from '../../api/AdminApi';
+import { useHistory } from "react-router-dom"
+import EditUser from './EditUser';
 const MnUser = ({ data }) => {
-    const [listUser, setListUser] = React.useState([
-        {
-            typeUser: 'admin',
-            image: 'https://vnn-imgs-f.vgcloud.vn/2020/03/23/11/trend-avatar-11.jpg',
-            _id: '61cb56682f910f4c5c85be64',
-            userName: 'testJWT',
-            password: '$2a$12$ZVGdWK3HCv01A14c6Yk4i.KWQZMu2zhPbAZdOJY6ZRl6ukWvyO6rS',
-            phone: '0123456789',
-            email: 'testJWT@gmail.com',
-            __v: 0
-        },
-        {
-            typeUser: 'user',
-            image: 'https://vnn-imgs-f.vgcloud.vn/2020/03/23/11/trend-avatar-11.jpg',
-            _id: '61cb5957d4e29a4c842298bf',
-            userName: 'testJWT',
-            password: '$2a$12$l25H0GPmSZYAm22Jf.R7FOK.B5dRC3FlK344n9ty7nlpjSYu2agIK',
-            phone: '0123456789',
-            email: 'test2912@gmail.com',
-            __v: 0
-        }
-    ]);
+    const [user, setUser] = React.useState({})
+    const history = useHistory()
+    const [listUser, setListUser] = React.useState([]);
     React.useEffect(() => {
-        const getData = async ()=>{
-
-        }
-        setListUser([
-            {
-                typeUser: 'admin',
-                image: 'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg',
-                _id: '61cb56682f910f4c5c85be64',
-                userName: 'testJWT',
-                password: '$2a$12$ZVGdWK3HCv01A14c6Yk4i.KWQZMu2zhPbAZdOJY6ZRl6ukWvyO6rS',
-                phone: '0123456789',
-                email: 'testJWT@gmail.com',
-                __v: 0
-            },
-            {
-                typeUser: 'user',
-                image: 'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg',
-                _id: '61cb5957d4e29a4c842298bf',
-                userName: 'testJWT',
-                password: '$2a$12$l25H0GPmSZYAm22Jf.R7FOK.B5dRC3FlK344n9ty7nlpjSYu2agIK',
-                phone: '0123456789',
-                email: 'test2912@gmail.com',
-                __v: 0
-            }
-        ]);
-        console.log("listuer:", listUser);
-    }, [])
-    React.useEffect(() => {
-        const getData = async () => {
-            console.log("vao day aaaa");
-            const response = await AdminApi.getListUser();
-            console.log("list user",response);
-            setListUser(response.listUser);
-            console.log("list user sau khi set",listUser);
+        const getData = async () => {            
+            const response = await AdminApi.getListUser();            
+            setListUser(response.listUser);            
         }
         getData();
     }, []);
@@ -72,28 +23,11 @@ const MnUser = ({ data }) => {
 
     React.useEffect(() => {
         if(search === ''){
-            setListUser([
-                {
-                    typeUser: 'admin',
-                    image: 'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg',
-                    _id: '61cb56682f910f4c5c85be64',
-                    userName: 'testJWT',
-                    password: '$2a$12$ZVGdWK3HCv01A14c6Yk4i.KWQZMu2zhPbAZdOJY6ZRl6ukWvyO6rS',
-                    phone: '0123456789',
-                    email: 'testJWT@gmail.com',
-                    __v: 0
-                },
-                {
-                    typeUser: 'user',
-                    image: 'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg',
-                    _id: '61cb5957d4e29a4c842298bf',
-                    userName: 'testJWT',
-                    password: '$2a$12$l25H0GPmSZYAm22Jf.R7FOK.B5dRC3FlK344n9ty7nlpjSYu2agIK',
-                    phone: '0123456789',
-                    email: 'test2912@gmail.com',
-                    __v: 0
-                }
-            ])
+            const getData = async () => {                
+                const response = await AdminApi.getListUser();                
+                setListUser(response.listUser);                
+            }
+            getData();
         }else{
 
             const getSearch = ()=>{
@@ -107,28 +41,33 @@ const MnUser = ({ data }) => {
     const [isEdit, setIsEdit] = React.useState(false);
     const [isDetail, setIsDetail] = React.useState(false);
     
-    const handlerAddNewUser =()=>{
-        console.log('test')
+    const handlerAddNewUser =()=>{        
         setIsNew(true);
         setIsEdit(false);
         setIsDetail(false);
     }
-    const handlerEdit =(id)=>{
+    const handlerEdit =(user)=>{
         setIsNew(false);
         setIsEdit(true);
         setIsDetail(false);
+        setUser(user);
     }
     const handlerDetail =(id)=>{
         setIsNew(false);
         setIsEdit(false);
         setIsDetail(true);
     }
-    const handlerDelete =(id)=>{
-        setIsNew(true);
-        setIsEdit(false);
-        setIsDetail(false);
-    }
-    console.log(listUser);
+    const handlerDelete =(user,index)=>{
+        const deleteUser = async() =>{
+            const result = await AdminApi.deleteUser(user._id);
+            console.log(result);
+        }
+        deleteUser();
+        setListUser((state)=>{
+            const newState = state.filter((item, i)=> i !== index);
+            return newState;
+        })
+    }    
     return (
         <div className="MnUser">
             <div className="MnUser__left">
@@ -166,10 +105,10 @@ const MnUser = ({ data }) => {
                                     <div style={{paddingTop: '10px', marginLeft: '220px', color: `${user.typeUser === 'admin' ? "#ff0000" : "white"}` }}>{user.typeUser}</div>
                                 </div>                                
                                 <div className="MnUser__left__listUser__icons">
-                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white'}} onClick={()=> handlerEdit(user._id)}>
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white'}} onClick={()=> handlerEdit(user)}>
                                         <FiEdit style={{color: 'white'}} />
                                     </div>
-                                    <div style={{marginLeft: '5px', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white'}} onClick={()=> handlerDelete(user._id)}>
+                                    <div style={{marginLeft: '5px', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white'}} onClick={()=> handlerDelete(user,index)}>
                                         <AiFillDelete style={{color: 'white'}} />
                                     </div>
                                 </div>
@@ -181,6 +120,9 @@ const MnUser = ({ data }) => {
             <div className="MnUser__right">
                 {
                     isNew ? (<CreateUser/>) : null
+                }
+                {
+                    isEdit ? (<EditUser user={user}/>) : null
                 }
             </div>
         </div>

@@ -3,8 +3,7 @@ const header= {
     Authorization: "Bearer "+localStorage.getItem("accessToken")
 }
 const AdminApi = {
-    getListUser: ()=>{
-        console.log(header);
+    getListUser: ()=>{        
         const url= '/admin/list-user';
         return axiosClient.get(url, header);
     },
@@ -21,9 +20,16 @@ const AdminApi = {
         return axiosClient.post(url, params);
     },
     createUser: (params)=>{
-        const url= '/admin/create-user';
-        console.log("vao day");
+        const url= '/admin/create-user';        
         return axiosClient.post(url, params);
+    },
+    deleteUser: (id)=>{
+        const url= '/admin/delete-user?id='+id;
+        return axiosClient.delete(url, header);
+    },
+    updateUser: (params)=>{
+        const url= '/admin/update-user';
+        return axiosClient.put(url, params, header);
     }
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import AdminApi from '../api/AdminApi.js'
-import MnUser from '../components/MnUser.jsx';
+import MnUser from '../components/admin/MnUser.jsx';
 // import MTable from "../components/MTable"
 
 const UserManagement = () => {

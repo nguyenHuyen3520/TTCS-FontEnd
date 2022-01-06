@@ -6,8 +6,7 @@ import Routes from './routes/Routes'
 
 const App = () => {
   React.useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    console.log("da di qua day");
+    const accessToken = localStorage.getItem('accessToken');    
   }, [])
   return (
     <BrowserRouter>

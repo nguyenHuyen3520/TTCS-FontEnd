@@ -4,6 +4,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Image from './Image'
 import SearchIcon from '@mui/icons-material/Search';
 import DensitySmallIcon from '@mui/icons-material/DensitySmall';
+import LoginIcon from '@mui/icons-material/Key'
 
 const Header = () => {
     const path = useParams();
@@ -54,12 +55,15 @@ const Header = () => {
                                         <div style={{ display: "flex" }}>
                                             <Link to={"/login"}>
                                                 <div className="header__button" style={{ marginRight: '10px', borderRadius: '5px', border: 'none', cursor: 'pointer' }}>
-                                                    Đăng Nhập
+                                                    <div className="header__button__icon">
+                                                        <LoginIcon />
+                                                    </div>
+                                                    Đăng nhập
                                                 </div>
                                             </Link>
                                             <Link to={"/signup"}>
                                                 <div className="header__button">
-                                                    Đăng Ký
+                                                    Đăng ký
                                                 </div>
                                             </Link>
                                         </div>

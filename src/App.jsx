@@ -32,7 +32,7 @@ const App = () => {
           )} />
         )
       }
-//asdfa 
+
     </BrowserRouter>
   )
 }

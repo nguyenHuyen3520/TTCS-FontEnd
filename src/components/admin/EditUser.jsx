@@ -35,6 +35,7 @@ const EditUser = ({ user }) => {
         validationSchema: validationSchema,
         onSubmit: (values) => {            
             const EditUser = async () => {
+                console.log(values);
                 const response = await AdminApi.updateUser(values);                
             }
             EditUser();                      
@@ -93,10 +94,13 @@ const EditUser = ({ user }) => {
                         <RadioGroup
                             aria-label="gender"
                             name="typeUser"
-                            defaultValue={user.typeUser}
+                            defaultValue={user.typeUser}                            
                         >
-                            <FormControlLabel onChange={formik.handleChange} value="user" control={<Radio />} label="User" />
-                            <FormControlLabel onChange={formik.handleChange} value="admin" control={<Radio />} label="Admin" />
+                            <div style={{display: 'flex', justifyContent: 'center'}}>
+                                <FormControlLabel onChange={formik.handleChange} value="user" control={<Radio />} label="User" />
+                                <FormControlLabel onChange={formik.handleChange} value="gv" control={<Radio />} label="gv" />
+                                <FormControlLabel onChange={formik.handleChange} value="admin" control={<Radio />} label="Admin" />
+                            </div>
                         </RadioGroup>
                         <div style={{ marginTop: "10px" }}>
                             <Button color="primary" variant="contained" fullWidth type="submit">

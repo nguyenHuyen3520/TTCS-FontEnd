@@ -1,79 +1,83 @@
 import React from 'react'
-import { FiEdit }from "react-icons/fi";
-import {AiFillDelete } from "react-icons/ai";
+import { FiEdit } from "react-icons/fi";
+import { AiFillDelete } from "react-icons/ai";
 import CreateUser from './CreateUser';
 import AdminApi from '../../api/AdminApi';
 import { useHistory } from "react-router-dom"
 import EditUser from './EditUser';
+import { IoIosAddCircleOutline } from "react-icons/io";
+
 const MnUser = ({ data }) => {
     const [user, setUser] = React.useState({})
     const history = useHistory()
     const [listUser, setListUser] = React.useState([]);
     React.useEffect(() => {
-        const getData = async () => {            
-            const response = await AdminApi.getListUser();            
-            setListUser(response.listUser);            
+        const getData = async () => {
+            const response = await AdminApi.getListUser();
+            setListUser(response.listUser);
         }
         getData();
     }, []);
     const [search, setSearch] = React.useState('')
-    const handleOnChange = (e)=>{
+    const handleOnChange = (e) => {
         setSearch(e.target.value);
     }
 
     React.useEffect(() => {
-        if(search === ''){
-            const getData = async () => {                
-                const response = await AdminApi.getListUser();                
-                setListUser(response.listUser);                
+        if (search === '') {
+            const getData = async () => {
+                const response = await AdminApi.getListUser();
+                setListUser(response.listUser);
             }
             getData();
-        }else{
+        } else {
 
-            const getSearch = ()=>{
-                const newListUser = listUser.filter((item)=> item.userName.includes(search));
+            const getSearch = () => {
+                const newListUser = listUser.filter((item) => item.userName.includes(search));
                 setListUser(newListUser);
             }
             getSearch();
         }
-    },[search])
+    }, [search])
     const [isNew, setIsNew] = React.useState(false);
     const [isEdit, setIsEdit] = React.useState(false);
     const [isDetail, setIsDetail] = React.useState(false);
-    
-    const handlerAddNewUser =()=>{        
+
+    const handlerAddNewUser = () => {
         setIsNew(true);
         setIsEdit(false);
         setIsDetail(false);
     }
-    const handlerEdit =(user)=>{
+    const handlerEdit = (user) => {
         setIsNew(false);
         setIsEdit(true);
         setIsDetail(false);
         setUser(user);
+        console.log(user._id);
     }
-    const handlerDetail =(id)=>{
+    const handlerDetail = (user) => {
         setIsNew(false);
         setIsEdit(false);
         setIsDetail(true);
+        console.log(user);
     }
-    const handlerDelete =(user,index)=>{
-        const deleteUser = async() =>{
+    const handlerDelete = (user, index) => {
+        const deleteUser = async () => {
             const result = await AdminApi.deleteUser(user._id);
             console.log(result);
         }
         deleteUser();
-        setListUser((state)=>{
-            const newState = state.filter((item, i)=> i !== index);
+        setListUser((state) => {
+            const newState = state.filter((item, i) => i !== index);
             return newState;
         })
-    }    
+    }
     return (
         <div className="MnUser">
             <div className="MnUser__left">
                 <div className="MnUser__left__header">
-                    <div style={{ height: '30px', width: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', padding: '3px', backgroundColor: '#303f9f', cursor: 'pointer' }} onClick={()=>handlerAddNewUser()}>
-                        <div style={{ fontSize: '2rem' }}>+</div>
+                    <div style={{ borderRadius: '50%', cursor: 'pointer' }} onClick={() => handlerAddNewUser()}>
+                        <IoIosAddCircleOutline fontSize={35} color="white" />
                     </div>
                     <div style={{ padding: '0px 30px', border: '1px solid #e0e0e0', borderRadius: '15px', lineHeight: '2rem' }}>
                         {listUser.length} user was found
@@ -82,15 +86,15 @@ const MnUser = ({ data }) => {
 
                     </div>
                 </div>
-                <input className="inputSearch" style={{ width: '100%', marginTop: '10px', height: '30px', border: 'none'}} placeholder="Enter user" onChange={(e)=>handleOnChange(e)} />
+                <input className="inputSearch w-11/12 outline-none border-b py-1 px-2 rounded-sm" style={{ width: '100%', marginTop: '10px', height: '30px', border: 'none' }} placeholder="Enter user" onChange={(e) => handleOnChange(e)} />
                 <div className="MnUser__left__listUser">
                     {
                         listUser.map((user, index) => (
                             <div key={index} style={{ display: 'flex', marginBottom: '10px', cursor: 'pointer', justifyContent: 'space-between' }} >
-                                <div style={{ display: 'flex', width: "100%" }} onClick={()=>handlerDetail(user._id)}>
-                                    <div style={{ height: '30px', width: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', padding: '3px', cursor: 'pointer', backgroundImage: `url("${user.image}")`, backgroundSize: 'cover' }}>                                        
+                                <div style={{ display: 'flex', width: "100%" }} onClick={() => handlerDetail(user)}>
+                                    <div style={{ height: '30px', width: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', padding: '3px', cursor: 'pointer', backgroundImage: `url("${user.image}")`, backgroundSize: 'cover' }}>
                                     </div>
-                                    <div style={{marginLeft: '10px'}}>
+                                    <div style={{ marginLeft: '10px' }}>
                                         <div>
                                             {
                                                 user.userName
@@ -102,14 +106,14 @@ const MnUser = ({ data }) => {
                                             }
                                         </div>
                                     </div>
-                                    <div style={{paddingTop: '10px', marginLeft: '220px', color: `${user.typeUser === 'admin' ? "#ff0000" : "white"}` }}>{user.typeUser}</div>
-                                </div>                                
+                                    <div style={{ paddingTop: '10px', marginLeft: '220px', color: `${user.typeUser === 'admin' ? "#ff0000" : "white"}` }}>{user.typeUser}</div>
+                                </div>
                                 <div className="MnUser__left__listUser__icons">
-                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white'}} onClick={()=> handlerEdit(user)}>
-                                        <FiEdit style={{color: 'white'}} />
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }} onClick={() => handlerEdit(user)}>
+                                        <FiEdit style={{ color: 'white' }} />
                                     </div>
-                                    <div style={{marginLeft: '5px', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white'}} onClick={()=> handlerDelete(user,index)}>
-                                        <AiFillDelete style={{color: 'white'}} />
+                                    <div style={{ marginLeft: '5px', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }} onClick={() => handlerDelete(user, index)}>
+                                        <AiFillDelete style={{ color: 'white' }} />
                                     </div>
                                 </div>
                             </div>
@@ -119,10 +123,10 @@ const MnUser = ({ data }) => {
             </div>
             <div className="MnUser__right">
                 {
-                    isNew ? (<CreateUser/>) : null
+                    isNew ? (<CreateUser />) : null
                 }
                 {
-                    isEdit ? (<EditUser user={user}/>) : null
+                    isEdit ? (<EditUser user={user} />) : null
                 }
             </div>
         </div>

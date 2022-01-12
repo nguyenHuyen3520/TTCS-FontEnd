@@ -1,19 +1,33 @@
-body{
-    a{
-        text-decoration: none;        
-    }
-    .main-content{
-        display: flex;        
-    }
+body {
+  a {
+    text-decoration: none;
+  }
+  .main-content {
+    display: flex;
+  }
 
-    .header__icon:focus .Catalog__left__navigation > .Catalog__left__txt{
-        display: block;
-        background-color: red;
-    }
+  .header__icon:focus .Catalog__left__navigation > .Catalog__left__txt {
+    display: block;
+    background-color: red;
+  }
 
-    .header__icon:hover .Catalog__left__txt{
-        display: block;
-        background-color: red;
-    }
-    background-color: '#edeff7';
+  .header__icon:hover .Catalog__left__txt {
+    display: block;
+    background-color: red;
+  }
+  background-color: "#edeff7";
+}
+.MuiOutlinedInput-input {
+  padding: 10px 4px !important;
+  width: 300px !important;
+  color: rgb(223, 223, 223) !important;
+  margin-left: 10px !important;
+}
+
+.MuiInputLabel-shrink {
+  color: rgb(223, 223, 223) !important;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border: 1px solid white !important;
 }

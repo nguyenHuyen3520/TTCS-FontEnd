@@ -16,8 +16,8 @@ const Course = () => {
             const list = await AdminApi.getTypeCourses();
             const listCourseType = list.data.map((item) => item.nameType);
             listCourseType.unshift("All");
-            setListTypeCourse(listCourseType);
-            setSelected(listTypeCourse[0]);            
+            setSelected("All")
+            setListTypeCourse(listCourseType);            
         }
         getData();
     }, []);
@@ -40,7 +40,7 @@ const Course = () => {
     return (
         <div className="">
             <div className="mb-8 mt-5 flex justify-center">
-                <div className="w-72">
+                <div className="w-52 cursor-pointer">
                     typeCourse
                     <Listbox value={selected} onChange={setSelected}>
                         <div className="relative mt-1">

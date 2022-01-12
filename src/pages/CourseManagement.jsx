@@ -1,6 +1,11 @@
 import React from 'react'
 import AdminApi from '../api/AdminApi';
-import ListCourse from '../components/ListCourse'
+import CourseApi from '../api/CourseApi';
+import { Link, useHistory } from 'react-router-dom'
+import { MdEdit } from 'react-icons/md';
+import { FaTrash } from 'react-icons/fa';
+import { IoIosAddCircleOutline } from "react-icons/io";
+import CreateCourse from '../components/admin/CreateCourse';
 
 const CourseManagement = () => {
     const [listCourse, setListCourse] = React.useState([]);
@@ -15,6 +20,50 @@ const CourseManagement = () => {
     const handleOnChange = (e) => {
         setSearch(e.target.value);
     }
+    const [course, setCourse] = React.useState({})
+    const history = useHistory()
+
+    React.useEffect(() => {
+        if (search === '') {
+            const getData = async () => {
+                // const response = await AdminApi.getListCourse();
+                // setListCourse(response.listUser);
+            }
+            getData();
+        } else {
+
+            const getSearch = () => {
+                // const newListUser = listCourse.filter((item) => item.userName.includes(search));
+                // setListCourse(newListUser);
+            }
+            getSearch();
+        }
+    }, [search])
+    const [isNew, setIsNew] = React.useState(false);
+    const [isEdit, setIsEdit] = React.useState(false);
+    const [isDetail, setIsDetail] = React.useState(false);
+
+    const handlerAddNewCourse = () => {
+        setIsNew(true);
+        setIsEdit(false);
+        setIsDetail(false);
+    }
+    const handlerEdit = (course) => {
+        setIsNew(false);
+        setIsEdit(true);
+        setIsDetail(false);
+        setCourse(course);
+        console.log(course._id);
+    }
+    const handlerDetail = (user) => {
+        setIsNew(false);
+        setIsEdit(false);
+        setIsDetail(true);
+        console.log(user);
+    }
+    const handlerDelete = (user, index) => {
+
+    }
     return (
         // <div>
         //     <div style={{ width: '900px' }}>
@@ -28,8 +77,8 @@ const CourseManagement = () => {
         <div className="MnUser">
             <div className="MnUser__left">
                 <div className="MnUser__left__header">
-                    <div style={{ height: '30px', width: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', padding: '3px', backgroundColor: '#303f9f', cursor: 'pointer' }}>
-                        <div style={{ fontSize: '2rem' }}>+</div>
+                    <div style={{ borderRadius: '50%', cursor: 'pointer' }} onClick={() => handlerAddNewCourse()}>
+                        <IoIosAddCircleOutline fontSize={35} color="white" />
                     </div>
                     <div style={{ padding: '0px 30px', border: '1px solid #e0e0e0', borderRadius: '15px', lineHeight: '2rem' }}>
                         {listCourse.length} course was found
@@ -38,15 +87,32 @@ const CourseManagement = () => {
 
                     </div>
                 </div>
-                <input className="inputSearch" style={{ width: '100%', marginTop: '10px', height: '30px', border: 'none' }} placeholder="Enter course" onChange={(e) => handleOnChange(e)} />
+                <input className="inputSearch w-11/12 outline-none border-b py-1 px-2 rounded-sm" style={{ width: '100%', marginTop: '10px', height: '30px', border: 'none' }} placeholder="Enter course" onChange={(e) => handleOnChange(e)} />
                 <div className="MnUser__left__listUser">
-                    <ListCourse listCourse={listCourse} col={3} />
+                    <div className={`grid grid-cols-3 gap-2`}>
+                        {
+                            listCourse.map((item, index) => (
+                                <Link to={`/course/${item._id}`} className='border-2 h-auto w-full bg-slate-500 rounded-md cursor-pointer shadow-2xl'>
+                                    <div className='w-full h-44 bg-cover bg-center' style={{ backgroundImage: `url("${item.image}")` }}>
+                                    </div>
+                                    {/* <div className="font-medium p-3 text-purple-50">{item.name}</div> */}
+                                    <div className='px-2 text-white py-3'>
+                                        <div className='pt-1 pb-8'>{item.name}</div>
+                                    </div>
+                                    <div className='flex justify-between mb-3 px-5'>
+                                        <div className="p-3 rounded-full hover:bg-slate-900"><FaTrash fontSize={20} /></div>
+                                        <div className="p-3 rounded-full hover:bg-slate-900"><MdEdit fontSize={20} /></div>
+                                    </div>
+                                </Link>
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
             <div className="MnUser__right">
-                {/* {
-                    isNew ? (<CreateUser />) : null
-                } */}
+                {
+                    isNew ? (<CreateCourse />) : null
+                }
             </div>
         </div>
     )

@@ -30,7 +30,7 @@ const validationSchema = yup.object({
     typeUser: yup.string(),
 });
 
-const CreateUser = () => {
+const CreateUser = ({ title }) => {
     const history = useHistory()
     const formik = useFormik({
         initialValues: {
@@ -43,14 +43,14 @@ const CreateUser = () => {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            console.log("value",values);
+            console.log("value", values);
             const CreateUser = async () => {
                 const response = await AdminApi.createUser(values);
                 console.log("aaaa", response);
             }
             CreateUser();
             history.push("/");
-            history.push("/admin-management-user");            
+            history.push("/admin-management-user");
         },
     });
 
@@ -59,7 +59,7 @@ const CreateUser = () => {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "100px", width: "600px", color: 'black', backgroundColor: 'white', padding: '10px', marginLeft: '250px' }}>
                 <div>
 
-                    <h1 style={{ textAlign: 'center' }}>Add new user</h1>
+                    <h1 style={{ textAlign: 'center' }}>Add New User</h1>
                     <form onSubmit={formik.handleSubmit}>
                         <TextField
                             fullWidth
@@ -118,10 +118,11 @@ const CreateUser = () => {
                             aria-label="gender"
                             defaultValue=""
                             name="typeUser"
-                            
                         >
-                            <FormControlLabel onChange={formik.handleChange}  value="user" control={<Radio />} label="User" />
-                            <FormControlLabel onChange={formik.handleChange} value="admin" control={<Radio />} label="Admin" />
+                            <div className="flex items-center mx-auto">
+                                <FormControlLabel onChange={formik.handleChange} value="user" control={<Radio />} label="User" />
+                                <FormControlLabel onChange={formik.handleChange} value="admin" control={<Radio />} label="Admin" />
+                            </div>
                         </RadioGroup>
                         <div style={{ marginTop: "10px" }}>
                             <Button color="primary" variant="contained" fullWidth type="submit">

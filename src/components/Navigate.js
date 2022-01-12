@@ -55,7 +55,7 @@ const Navigate = () => {
         }
     }, [isAdmin])
     return (
-        <div className="bg-slate-800 " style={{ height: '100vh' }}>
+        <div className="bg-slate-800 " style={{ minHeight: '100vh' }}>
             {
                 links.map((item, index) => (
                     <div key={index} className="flex justify-center w-16 p-3 navigate">

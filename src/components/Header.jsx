@@ -8,15 +8,19 @@ import DensitySmallIcon from '@mui/icons-material/DensitySmall';
 const Header = () => {
     const path = useParams();
     const history = useHistory()
-    const [profile, setProfile] = React.useState();
+    const [profile, setProfile] = useState();
     useEffect(() => {
         const profile = JSON.parse(localStorage.getItem('profile'));
         setProfile(profile);
-    }, [path])
+    }, [path]);
     const handlerLogout = () => {
         localStorage.removeItem('profile')
         setProfile(false);
         history.push("/")
+    }
+    const handlerGoToMyCourse = ()=>{
+        history.push("/")
+        history.push("/myCourse");
     }
     return (
         <div style={{ background: 'linear-gradient(120deg, #2980b9, #8e44ad)', color: "#fff" }}>
@@ -45,7 +49,9 @@ const Header = () => {
                                 {
                                     profile ? (
                                         <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', marginRight: '10px' }}>
-                                            <button onClick={() => handlerLogout()} style={{marginRight: '10px', borderRadius: '5px', border: 'none', cursor: 'pointer'}}>My Course</button>
+                                            <button 
+                                                onClick={() => handlerGoToMyCourse()} style={{marginRight: '10px', borderRadius: '5px', border: 'none', cursor: 'pointer'}}
+                                            >My Course</button>
                                             <AccountCircleIcon fontSize="large" />
                                             <div style={{ margin: "0 10px" }} >{profile.userName}</div>
                                             <button onClick={() => handlerLogout()} style={{borderRadius: '5px', border: 'none', cursor: 'pointer'}}>Logout</button>

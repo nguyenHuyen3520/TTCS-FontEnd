@@ -1,4 +1,4 @@
-import React , { Fragment, useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import AdminApi from '../api/AdminApi'
 import ListCourse from './ListCourse';
 import { Listbox, Transition } from '@headlessui/react'
@@ -8,7 +8,7 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 const Course = () => {
     const [listCourse, setListCourse] = React.useState([]);
     const [listTypeCourse, setListTypeCourse] = React.useState([]);
-    const [selected, setSelected] = React.useState('All')    
+    const [selected, setSelected] = React.useState('All')
     React.useEffect(() => {
         const getData = async () => {
             const response = await AdminApi.getListCourse();
@@ -17,7 +17,7 @@ const Course = () => {
             const listCourseType = list.data.map((item) => item.nameType);
             listCourseType.unshift("All");
             setSelected("All")
-            setListTypeCourse(listCourseType);            
+            setListTypeCourse(listCourseType);
         }
         getData();
     }, []);
@@ -25,18 +25,18 @@ const Course = () => {
     React.useEffect(() => {
         const getData = async () => {
             console.log("===========================")
-            const response = await AdminApi.getListCourse();            
-            if(selected === 'All')  {
+            const response = await AdminApi.getListCourse();
+            if (selected === 'All') {
                 setListCourse(response.data)
-            } else{
-                let filterCourse = response.data.filter((item, index)=> {
+            } else {
+                let filterCourse = response.data.filter((item, index) => {
                     return item.typeCourse == selected;
                 })
                 setListCourse(filterCourse)
-            }                   
+            }
         }
         getData();
-    },[selected] )
+    }, [selected])
     return (
         <div className="">
             <div className="mb-8 mt-5 flex justify-center">
@@ -98,7 +98,7 @@ const Course = () => {
                     {listCourse.length} Course was found
                 </div>
             </div>
-            <ListCourse listCourse={listCourse} col={7} />
+            <ListCourse listCourse={listCourse} col={6} />
         </div>
     )
 }

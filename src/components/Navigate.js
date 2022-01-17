@@ -11,12 +11,12 @@ const Navigate = () => {
         {
             name: "Home",
             path: "/",
-            icon: <AiFillHome style={{ fontSize: '25px', color: 'black' }} />
+            icon: <AiFillHome style={{ fontSize: '25px', color: 'white', justifyContent: 'center', alignItems: 'center' }} />
         },
         {
             name: "Courses",
             path: "/courses",
-            icon: <MenuBookIcon style={{ fontSize: '25px', color: 'black' }} />
+            icon: <MenuBookIcon style={{ fontSize: '25px', color: 'white', justifyContent: 'center', alignItems: 'center' }} />
         }
     ]);
     const activeNav = links.findIndex(e => e.path === pathname)
@@ -32,20 +32,20 @@ const Navigate = () => {
                         {
                             name: "Home",
                             path: "/",
-                            icon: <AiFillHome style={{ fontSize: '25px', color: 'white' }} />
+                            icon: <AiFillHome style={{ fontSize: '25px', color: 'white', justifyContent: 'center', alignItems: 'center' }} />
                         },
                         {
                             name: "Courses",
                             path: "/courses",
-                            icon: <MenuBookIcon style={{ fontSize: '25px', color: 'white' }} />
+                            icon: <MenuBookIcon style={{ fontSize: '25px', color: 'white', justifyContent: 'center', alignItems: 'center' }} />
                         }, {
                             name: "Course mngmt",
                             path: "/admin-management-course",
-                            icon: <AiFillHdd style={{ fontSize: '25px', color: 'white' }} />
+                            icon: <AiFillHdd style={{ fontSize: '25px', color: 'white', justifyContent: 'center', alignItems: 'center' }} />
                         }, {
                             name: "User mngmt",
                             path: "/admin-management-user",
-                            icon: <AssignmentIndIcon style={{ fontSize: '25px', color: 'white' }} />
+                            icon: <AssignmentIndIcon style={{ fontSize: '25px', color: 'white', justifyContent: 'center', alignItems: 'center' }} />
                         }
                     ]
                 });
@@ -60,7 +60,7 @@ const Navigate = () => {
                 links.map((item, index) => (
                     <div key={index} className="flex justify-center w-16 p-3 navigate">
                         <Link to={item.path}>
-                            <div className={`${index === activeNav ? 'active' : ''} flex`}>
+                            <div className={`${index === activeNav ? 'active' : ''} flex p-3`}>
                                 <div>
                                     {item.icon}
                                 </div>
@@ -68,6 +68,16 @@ const Navigate = () => {
                                     {item.name}
                                 </div>
                             </div>
+                            {/* <div className={`${index === activeNav ? 'active' : ''} flex`}>
+                                <div className="justify-center items-center">
+                                    <div className="place-content-center">
+                                        {item.icon}
+                                    </div>
+                                    <div className="text-white text-center">
+                                        {item.name}
+                                    </div>
+                                </div>
+                            </div> */}
                         </Link>
                     </div>
                 ))

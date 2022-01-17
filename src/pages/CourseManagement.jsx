@@ -5,7 +5,60 @@ import { Link, useHistory } from 'react-router-dom'
 import { MdEdit } from 'react-icons/md';
 import { FaTrash } from 'react-icons/fa';
 import { IoIosAddCircleOutline } from "react-icons/io";
-import CreateCourse from '../components/admin/CreateCourse';
+import DetailCourse from '../components/admin/DetailCourse';
+import EditCourse from '../components/admin/EditCourse';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import Paper from '@material-ui/core/Paper';
+import { alpha } from '@material-ui/core/styles'
+import { ViewState } from '@devexpress/dx-react-scheduler';
+import {
+    Scheduler,
+    WeekView,
+    Toolbar,
+    DateNavigator,
+    Appointments,
+    AllDayPanel,
+} from '@devexpress/dx-react-scheduler-material-ui';
+
+const appointments = [
+    {
+        title: "Reactjs",
+        startDate: "2022-01-11T09:45",
+        endDate: "2022-01-11T11:45",
+    },
+    {
+        title: "Reactjs",
+        startDate: "2022-01-13T09:45",
+        endDate: "2022-01-13T11:45",
+    },
+    {
+        title: "Reactjs",
+        startDate: "2022-01-15T09:45",
+        endDate: "2022-01-15T11:45",
+    },
+    {
+        title: "Reactjs",
+        startDate: "2022-01-20T09:45",
+        endDate: "2022-01-20T11:45",
+    },
+]
+
+const allDayLocalizationMessages = {
+    'fr-FR': {
+        allDay: 'Temps plein',
+    },
+    'de-GR': {
+        allDay: 'Ganztägig',
+    },
+    'en-US': {
+        allDay: 'All Day',
+    },
+};
+
+const getAllDayMessages = locale => allDayLocalizationMessages[locale];
 
 const CourseManagement = () => {
     const [listCourse, setListCourse] = React.useState([]);
@@ -48,18 +101,20 @@ const CourseManagement = () => {
         setIsEdit(false);
         setIsDetail(false);
     }
-    const handlerEdit = (course) => {
+    const handlerEdit = (value) => {
+        console.log("value", value);
         setIsNew(false);
         setIsEdit(true);
         setIsDetail(false);
-        setCourse(course);
-        console.log(course._id);
+        setCourse(value);
+        console.log(course);
     }
-    const handlerDetail = (user) => {
+    const handlerDetail = (value) => {
         setIsNew(false);
         setIsEdit(false);
         setIsDetail(true);
-        console.log(user);
+        setCourse(value);
+        console.log(value);
     }
     const handlerDelete = (user, index) => {
 
@@ -92,18 +147,20 @@ const CourseManagement = () => {
                     <div className={`grid grid-cols-3 gap-2`}>
                         {
                             listCourse.map((item, index) => (
-                                <Link to={`/course/${item._id}`} className='border-2 h-auto w-full bg-slate-500 rounded-md cursor-pointer shadow-2xl'>
-                                    <div className='w-full h-44 bg-cover bg-center' style={{ backgroundImage: `url("${item.image}")` }}>
+                                <div className='border-2 h-auto w-full bg-slate-500 rounded-md cursor-pointer shadow-2xl' key={index} >
+                                    <div onClick={() => handlerDetail(item)}>
+                                        <div className='w-full h-44 bg-cover bg-center' style={{ backgroundImage: `url("${item.image}")` }}>
+                                        </div>
+                                        {/* <div className="font-medium p-3 text-purple-50">{item.name}</div> */}
+                                        <div className='px-2 text-white py-3'>
+                                            <div className='pt-1 pb-8'>{item.name}</div>
+                                        </div>
                                     </div>
-                                    {/* <div className="font-medium p-3 text-purple-50">{item.name}</div> */}
-                                    <div className='px-2 text-white py-3'>
-                                        <div className='pt-1 pb-8'>{item.name}</div>
+                                    <div className='flex justify-between mb-3 px-5 z-10'>
+                                        <div className="p-3 rounded-full hover:bg-slate-900" onClick={() => handlerDelete(item)} ><FaTrash fontSize={20} /></div>
+                                        <div className="p-3 rounded-full hover:bg-slate-900" onClick={() => handlerEdit(item)} ><MdEdit fontSize={20} /></div>
                                     </div>
-                                    <div className='flex justify-between mb-3 px-5'>
-                                        <div className="p-3 rounded-full hover:bg-slate-900"><FaTrash fontSize={20} /></div>
-                                        <div className="p-3 rounded-full hover:bg-slate-900"><MdEdit fontSize={20} /></div>
-                                    </div>
-                                </Link>
+                                </div>
                             ))
                         }
                     </div>
@@ -111,10 +168,13 @@ const CourseManagement = () => {
             </div>
             <div className="MnUser__right">
                 {
-                    isNew ? (<CreateCourse />) : null
+                    isEdit ? (<EditCourse course={course} />) : null
+                }
+                {
+                    isDetail ? (<DetailCourse course={course} />) : null
                 }
             </div>
-        </div>
+        </div >
     )
 }
 

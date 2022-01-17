@@ -5,7 +5,11 @@ import CreateUser from './CreateUser';
 import AdminApi from '../../api/AdminApi';
 import { useHistory } from "react-router-dom"
 import EditUser from './EditUser';
+import DetailtUser from './DetailtUser';
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const MnUser = ({ data }) => {
     const [user, setUser] = React.useState({})
@@ -59,12 +63,22 @@ const MnUser = ({ data }) => {
         setIsNew(false);
         setIsEdit(false);
         setIsDetail(true);
+        setUser(user);
         console.log(user);
     }
     const handlerDelete = (user, index) => {
         const deleteUser = async () => {
             const result = await AdminApi.deleteUser(user._id);
             console.log(result);
+            toast('Xóa user thành công!', {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
         deleteUser();
         setListUser((state) => {
@@ -128,7 +142,11 @@ const MnUser = ({ data }) => {
                 {
                     isEdit ? (<EditUser user={user} />) : null
                 }
+                {
+                    isDetail ? (<DetailtUser user={user} />) : null
+                }
             </div>
+            <ToastContainer />
         </div>
     )
 }

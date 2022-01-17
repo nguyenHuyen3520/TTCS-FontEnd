@@ -33,6 +33,15 @@ const CourseApi = {
     getSchedule: (params) => {
         const url = "/get-schedule";
         return axiosClient.get(url, params, header);
+    },
+    getScheduleOfCourse: (params) => {
+        console.log("params", params)
+        const url = "/get-schedule-of-course?course_id=" + params;
+        return axiosClient.get(url, params, header);
+    },
+    getUserOfCourse: (params) => {
+        const url = "/get-user-of-course?course_id=" + params;
+        return axiosClient.get(url, params, header);
     }
 }
 

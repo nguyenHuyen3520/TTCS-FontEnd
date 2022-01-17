@@ -23,34 +23,22 @@ const validationSchema = yup.object({
         .string('Enter your password')
         .min(8, 'Password should be of minimum 8 characters length')
         .required('Password is required'),
-    passwordConfirmation: yup.string()
-        .oneOf([yup.ref('password'), null], 'Passwords must match'),
     phone: yup
         .number().required('phone is required'),
     typeUser: yup.string(),
 });
 
-const CreateUser = ({ title }) => {
+const DetailtUser = ({ user }) => {
     const history = useHistory()
     const formik = useFormik({
-        initialValues: {
-            userName: '',
-            email: '',
-            password: '',
-            passwordConfirmation: '',
-            phone: '',
-            typeUser: '',
-        },
+        initialValues: user,
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            console.log("value", values);
-            const CreateUser = async () => {
-                const response = await AdminApi.createUser(values);
-                console.log("aaaa", response);
+            const DetailtUser = async () => {
+                console.log(values);
+                const response = await AdminApi.updateUser(values);
             }
-            CreateUser();
-            history.push("/");
-            history.push("/admin-management-user");
+            DetailtUser();
         },
     });
 
@@ -59,7 +47,7 @@ const CreateUser = ({ title }) => {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "100px", width: "600px", color: 'black', backgroundColor: 'white', padding: '10px', marginLeft: '250px' }}>
                 <div>
 
-                    <h1 style={{ textAlign: 'center' }}>Add New User</h1>
+                    <h1 className="text-center font-bold text-3xl">Detail user</h1>
                     <form onSubmit={formik.handleSubmit}>
                         <TextField
                             fullWidth
@@ -70,6 +58,7 @@ const CreateUser = ({ title }) => {
                             onChange={formik.handleChange}
                             error={formik.touched.userName && Boolean(formik.errors.userName)}
                             helperText={formik.touched.userName && formik.errors.userName}
+                            disabled
                         />
                         <TextField
                             fullWidth
@@ -80,28 +69,7 @@ const CreateUser = ({ title }) => {
                             onChange={formik.handleChange}
                             error={formik.touched.email && Boolean(formik.errors.email)}
                             helperText={formik.touched.email && formik.errors.email}
-                        />
-                        <TextField
-                            fullWidth
-                            id="password"
-                            name="password"
-                            label="Password"
-                            type="password"
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            error={formik.touched.password && Boolean(formik.errors.password)}
-                            helperText={formik.touched.password && formik.errors.password}
-                        />
-                        <TextField
-                            fullWidth
-                            id="passwordConfirmation"
-                            name="passwordConfirmation"
-                            label="passwordConfirmation"
-                            type="password"
-                            value={formik.values.passwordConfirmation}
-                            onChange={formik.handleChange}
-                            error={formik.touched.passwordConfirmation && Boolean(formik.errors.passwordConfirmation)}
-                            helperText={formik.touched.passwordConfirmation && formik.errors.passwordConfirmation}
+                            disabled
                         />
                         <TextField
                             fullWidth
@@ -112,17 +80,19 @@ const CreateUser = ({ title }) => {
                             onChange={formik.handleChange}
                             error={formik.touched.phone && Boolean(formik.errors.phone)}
                             helperText={formik.touched.phone && formik.errors.phone}
+                            disabled
                         />
                         <FormLabel component="legend">TypeUser</FormLabel>
                         <RadioGroup
                             aria-label="gender"
-                            defaultValue=""
                             name="typeUser"
+                            defaultValue={user.typeUser}
+                            disabled
                         >
-                            <div className="flex items-center mx-auto">
-                                <FormControlLabel onChange={formik.handleChange} value="hoc_vien" control={<Radio />} label="Hoc_Vien" />
-                                <FormControlLabel onChange={formik.handleChange} value="giao_vien" control={<Radio />} label="Giao_Vien" />
-                                <FormControlLabel onChange={formik.handleChange} value="admin" control={<Radio />} label="Admin" />
+                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                <FormControlLabel onChange={formik.handleChange} value="hoc_vien" control={<Radio />} label="Hoc Vien" disabled />
+                                <FormControlLabel onChange={formik.handleChange} value="giao_vien" control={<Radio />} label="Giao Vien" disabled />
+                                <FormControlLabel onChange={formik.handleChange} value="admin" control={<Radio />} label="Admin" disabled />
                             </div>
                         </RadioGroup>
                         <div style={{ marginTop: "10px" }}>
@@ -137,4 +107,4 @@ const CreateUser = ({ title }) => {
     );
 };
 
-export default CreateUser
+export default DetailtUser

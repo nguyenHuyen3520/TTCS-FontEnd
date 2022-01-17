@@ -5,6 +5,11 @@ import { Link } from 'react-router-dom'
 // Import Swiper styles
 import 'swiper/css';
 
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+import { makeStyles } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 import Paper from '@material-ui/core/Paper';
 import { alpha } from '@material-ui/core/styles'
 import { ViewState } from '@devexpress/dx-react-scheduler';
@@ -17,28 +22,6 @@ import {
     AllDayPanel,
 } from '@devexpress/dx-react-scheduler-material-ui';
 
-const appointments = [
-    {
-        title: "Reactjs",
-        startDate: "2022-01-11T09:45",
-        endDate: "2022-01-11T11:45",
-    },
-    {
-        title: "Reactjs",
-        startDate: "2022-01-13T09:45",
-        endDate: "2022-01-13T11:45",
-    },
-    {
-        title: "Reactjs",
-        startDate: "2022-01-15T09:45",
-        endDate: "2022-01-15T11:45",
-    },
-    {
-        title: "Reactjs",
-        startDate: "2022-01-20T09:45",
-        endDate: "2022-01-20T11:45",
-    },
-]
 
 const allDayLocalizationMessages = {
     'fr-FR': {
@@ -52,31 +35,62 @@ const allDayLocalizationMessages = {
     },
 };
 
+const useStyles = makeStyles(theme => ({
+    todayCell: {
+        backgroundColor: fade(theme.palette.primary.main, 0.1),
+        '&:hover': {
+            backgroundColor: fade(theme.palette.primary.main, 0.14),
+        },
+        '&:focus': {
+            backgroundColor: fade(theme.palette.primary.main, 0.16),
+        },
+    },
+    weekendCell: {
+        backgroundColor: fade(theme.palette.action.disabledBackground, 0.04),
+        '&:hover': {
+            backgroundColor: fade(theme.palette.action.disabledBackground, 0.04),
+        },
+        '&:focus': {
+            backgroundColor: fade(theme.palette.action.disabledBackground, 0.04),
+        },
+    },
+    today: {
+        backgroundColor: fade(theme.palette.primary.main, 0.16),
+    },
+    weekend: {
+        backgroundColor: fade(theme.palette.action.disabledBackground, 0.06),
+    },
+}));
+
 const getAllDayMessages = locale => allDayLocalizationMessages[locale];
 
-// const LocaleSwitcher = withStyles(styles, { name: 'LocaleSwitcher' })(
-//     ({ onLocaleChange, currentLocale, classes }) => (
-//         <div className={classes.container}>
-//             <div className={classes.text}>
-//                 Locale:
-//             </div>
-//             <TextField
-//                 select
-//                 value={currentLocale}
-//                 onChange={onLocaleChange}
-//             >
-//                 <MenuItem value="fr-FR">Le français (French)</MenuItem>
-//                 <MenuItem value="de-GR">Deutsch (German)</MenuItem>
-//                 <MenuItem value="en-US">English (United States)</MenuItem>
-//             </TextField>
-//         </div>
-//     ),
-// );
+const TimeTableCell = (props) => {
+    const classes = useStyles();
+    const { startDate } = props;
+    const date = new Date(startDate);
+
+    if (date.getDate() === new Date().getDate()) {
+        return <WeekView.TimeTableCell {...props} className={classes.todayCell} />;
+    } if (date.getDay() === 0 || date.getDay() === 6) {
+        return <WeekView.TimeTableCell {...props} className={classes.weekendCell} />;
+    } return <WeekView.TimeTableCell {...props} />;
+};
+
+const DayScaleCell = (props) => {
+    const classes = useStyles();
+    const { startDate, today } = props;
+
+    if (today) {
+        return <WeekView.DayScaleCell {...props} className={classes.today} />;
+    } if (startDate.getDay() === 0 || startDate.getDay() === 6) {
+        return <WeekView.DayScaleCell {...props} className={classes.weekend} />;
+    } return <WeekView.DayScaleCell {...props} />;
+};
 
 const MyCourse = () => {
     const [schedule, setSchedule] = useState()
     const [state, setState] = useState({
-        data: appointments,
+        data: [],
         currentDate: '2022-01-11',
         locale: 'en-US',
     })
@@ -93,40 +107,51 @@ const MyCourse = () => {
                 }
             )
             setListCourse(response.data);
+            console.log("listCourse", listCourse)
         }
         getData();
     }, [])
     const { data, currentDate, locale } = state;
     return (
         <div className="p-9">
-            <div>
-                <div className="font-bold text-3xl">
-                    Danh sách khóa học của bạn:
-                </div>
-                <div className="mt-4">
-                    <Swiper
-                        spaceBetween={50}
-                        slidesPerView={5}
-                        onSlideChange={() => console.log('slide change')}
-                        onSwiper={(swiper) => console.log(swiper)}
-                    >
-                        {
-                            listCourse.map((item, index) => (
-                                <SwiperSlide key={index}>
-                                    <Link to={`/course/${item._id}`}>
-                                        <div>
-                                            <img src={item.image} alt={item.name} />
-                                        </div>
-                                        <div className="text-center text-2xl">
-                                            {item.name}
-                                        </div>
-                                    </Link>
-                                </SwiperSlide>
-                            ))
-                        }
-                    </Swiper>
-                </div>
-            </div>
+            {
+                listCourse.length > 0 ? (
+                    <div>
+                        <div className="font-bold text-3xl">
+                            Danh sách khóa học của bạn:
+                        </div>
+                        <div className="mt-4">
+                            <Swiper
+                                spaceBetween={50}
+                                slidesPerView={5}
+                                onSlideChange={() => console.log('slide change')}
+                                onSwiper={(swiper) => console.log(swiper)}
+                            >
+                                {
+                                    listCourse.map((item, index) => (
+                                        <SwiperSlide key={index}>
+                                            <Link to={`/course/${item._id}`}>
+                                                <div>
+                                                    <img src={item.image} alt={item.name} />
+                                                </div>
+                                                <div className="text-center text-2xl">
+                                                    {item.name}
+                                                </div>
+                                            </Link>
+                                        </SwiperSlide>
+                                    ))
+                                }
+                            </Swiper>
+                        </div>
+                    </div>) : (<div>
+                        <div className="font-bold text-3xl">
+                            Danh sách khóa học của bạn:
+                        </div>
+                        <div className="mt-4 h-24" style={{ lineHeight: "80px" }}>
+                            Bạn chưa có khóa học nào.
+                        </div>
+                    </div>)
+            }
             <div>
                 <div className="font-bold text-3xl mt-7 mb-3">
                     Lịch học của bạn:
@@ -145,6 +170,8 @@ const MyCourse = () => {
                                 <WeekView
                                     startDayHour={7}
                                     endDayHour={22}
+                                    timeTableCellComponent={TimeTableCell}
+                                    dayScaleCellComponent={DayScaleCell}
                                 />
                                 <Toolbar />
                                 <DateNavigator />
@@ -157,7 +184,8 @@ const MyCourse = () => {
                     </div>
                 </div>
             </div>
-        </div>
+            <ToastContainer />
+        </div >
     )
 }
 

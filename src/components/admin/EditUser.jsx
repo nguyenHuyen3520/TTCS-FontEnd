@@ -10,7 +10,10 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const validationSchema = yup.object({
     userName: yup
@@ -33,12 +36,21 @@ const EditUser = ({ user }) => {
     const formik = useFormik({
         initialValues: user,
         validationSchema: validationSchema,
-        onSubmit: (values) => {            
+        onSubmit: (values) => {
             const EditUser = async () => {
                 console.log(values);
-                const response = await AdminApi.updateUser(values);                
+                const response = await AdminApi.updateUser(values);
+                toast('Chỉnh sửa user thành công!', {
+                    position: "bottom-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
-            EditUser();                      
+            EditUser();
         },
     });
 
@@ -94,11 +106,11 @@ const EditUser = ({ user }) => {
                         <RadioGroup
                             aria-label="gender"
                             name="typeUser"
-                            defaultValue={user.typeUser}                            
+                            defaultValue={user.typeUser}
                         >
-                            <div style={{display: 'flex', justifyContent: 'center'}}>
-                                <FormControlLabel onChange={formik.handleChange} value="user" control={<Radio />} label="User" />
-                                <FormControlLabel onChange={formik.handleChange} value="gv" control={<Radio />} label="gv" />
+                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                <FormControlLabel onChange={formik.handleChange} value="hoc_vien" control={<Radio />} label="Hoc Vien" />
+                                <FormControlLabel onChange={formik.handleChange} value="giao_vien" control={<Radio />} label="Giao Vien" />
                                 <FormControlLabel onChange={formik.handleChange} value="admin" control={<Radio />} label="Admin" />
                             </div>
                         </RadioGroup>
@@ -109,6 +121,7 @@ const EditUser = ({ user }) => {
                         </div>
                     </form>
                 </div>
+                <ToastContainer />
             </div>
         </Container>
     );

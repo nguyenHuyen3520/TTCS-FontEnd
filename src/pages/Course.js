@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom'
 import CourseApi from '../api/CourseApi'
 import { BsCheckLg } from "react-icons/bs";
 import Image from '../components/Image';
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const Course = () => {
     const [data, setData] = useState({});
@@ -24,6 +27,15 @@ const Course = () => {
         const profile = JSON.parse(localStorage.getItem('profile'));
         setIsCheck(false);
         const response = await CourseApi.addUserToCourse({ Course_id: path.id, User_id: profile.id });
+        toast('Đăng ký thành công!', {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
         console.log(response);
     }
     const handlerDelete = async () => {
@@ -31,6 +43,15 @@ const Course = () => {
         console.log("profile: ", profile);
         setIsCheck(true);
         const response = await CourseApi.DeleteUserFromCourse({ Course_id: path.id, User_id: profile.id });
+        toast('Hủy Đăng ký thành công!', {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
         console.log(response);
     }
     return (
@@ -85,6 +106,7 @@ const Course = () => {
                     }
                 </div>
             </div>
+            <ToastContainer />
         </div>
     )
 }

@@ -6,7 +6,9 @@ import TextField from '@material-ui/core/TextField';
 import userApi from '../api/userApi';
 import { Container } from '@mui/material';
 import { useHistory } from "react-router-dom"
+import { GoogleLogin } from 'react-google-login';
 
+const clientId = "204968990099-vnh6f6s4rgcte95ul3o12qs6polbik4p.apps.googleusercontent.com";
 const validationSchema = yup.object({
   email: yup
     .string('Enter your email')
@@ -20,6 +22,7 @@ const validationSchema = yup.object({
 
 const Login = () => {
   const history = useHistory()
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -28,7 +31,7 @@ const Login = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       const login = async () => {
-        const response = await userApi.login(values);        
+        const response = await userApi.login(values);
         localStorage.setItem('accessToken', response.accessToken);
         const user = await userApi.getProfile();
         console.log(JSON.stringify({ ...user.user }));
@@ -40,6 +43,22 @@ const Login = () => {
     },
   });
 
+  const onLoginSuccess = async (res) => {
+    console.log('Login Success:', res.profileObj);
+    const values = {
+      userName: res.profileObj.name,
+      email: res.profileObj.email,
+      image: res.profileObj.imageUrl,
+      isGoogle: true
+    }
+    const response = await userApi.login(values);
+    localStorage.setItem('accessToken', response.accessToken);
+    const user = await userApi.getProfile();
+    console.log(JSON.stringify({ ...user.user }));
+    localStorage.setItem('profile', JSON.stringify({ ...user.user }));
+    console.log({ ...user.user });
+    history.push("/")
+  };
   return (
     <Container>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "300px" }}>
@@ -72,6 +91,17 @@ const Login = () => {
               <Button color="primary" variant="contained" fullWidth type="submit">
                 Submit
               </Button>
+            </div>
+            <div className="w-full mt-3 border-x-slate-50">
+              <GoogleLogin
+                clientId={clientId}
+                buttonText="Sign In With Google"
+                onSuccess={onLoginSuccess}
+                // onFailure={onLoginFailure}
+                cookiePolicy={'single_host_origin'}
+                isSignedIn={true}
+                style={{ width: '100px' }}
+              />
             </div>
           </form>
         </div>

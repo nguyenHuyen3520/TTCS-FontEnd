@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 const ListCourse = ({ listCourse, col }) => {
     console.log(col)
     return (
-        <div className={`grid grid-cols-7 gap-2`}>
+        <div className={`grid grid-cols-6 gap-2`}>
             {
                 listCourse.map((item, index) => (
                     <Link to={`/course/${item._id}`} className='border-2 h-auto w-full bg-slate-500 rounded-md cursor-pointer shadow-2xl'>

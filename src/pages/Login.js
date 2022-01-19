@@ -60,9 +60,10 @@ const Login = () => {
     history.push("/")
   };
   return (
-    <Container>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "300px" }}>
-        <div>
+    <div className= "form" style ={{background:'rgb(34,193,195)', background: 'linear-gradient(135deg, rgba(34,193,195,1) 0%,     rgba(253,187,45,1) 100%)', top:'0px',height:'100%', paddingTop:'150px'}}>
+    <Container style={{ maxWidth:'500px', minWidth:'300px', maxHeight:'700px', width:'30%', height:'60%', margin:'auto', backgroundColor:'#FFFFFF', borderRadius:'25px', padding:'80px'}}>
+      <div classname= " form_login" style={{ }}>
+      
 
           <h1 className="font-bold text-5xl text-center mb-2">Login</h1>
           <form onSubmit={formik.handleSubmit}>
@@ -105,8 +106,9 @@ const Login = () => {
             </div>
           </form>
         </div>
-      </div>
+     
     </Container>
+    </div>
   );
 };
 

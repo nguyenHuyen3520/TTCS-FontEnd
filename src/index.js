@@ -5,7 +5,9 @@ import "./sass/index.scss"
 import "swiper/css";
 import "swiper/css/pagination"
 import "swiper/css/navigation"
-import "./index.css"
+import "./index.css";
+
+
 
 ReactDOM.render(
   <React.StrictMode>    

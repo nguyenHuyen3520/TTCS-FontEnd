@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react'
 import { Link, useParams, useHistory } from 'react-router-dom'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -7,7 +8,12 @@ import DensitySmallIcon from '@mui/icons-material/DensitySmall';
 import LoginIcon from '@mui/icons-material/Key'
 import { BiLogIn } from "react-icons/bi";
 import { GoogleLogout, useGoogleLogout } from 'react-google-login';
-import logo from "../assets/logo.png"
+import logo from "../assets/logo.png";
+import MenuIcon from '@material-ui/icons/Menu';
+import { Menu } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+
+
 
 const clientId = "204968990099-vnh6f6s4rgcte95ul3o12qs6polbik4p.apps.googleusercontent.com";
 
@@ -50,12 +56,35 @@ const Header = () => {
 
                     <div className="header">
                         <div className="header__left flex ">
-                            <div className="header__icon mr-3">
-                                <DensitySmallIcon />
-                            </div>
-                            <div className="items-center mt-1">
-                                <Link to="/">
-                                    <Image src={logo} alt="logo" height={35} width={120} />
+                            
+                            <label htmlFor="nav__mobile-input" className="nav__bars-btn">                        
+                            <MenuIcon style={{color:'#FFFFFF'}} class="nav__bars-btn-1"/>
+                          </label>
+                          <input type="checkbox" hidden className="nav__input" id="nav__mobile-input" />
+                          <label htmlFor="nav__mobile-input" className="nav__overlay">
+                          </label>
+                          <nav className="nav__mobile">
+                            <label htmlFor="nav__mobile-input" className="nav__mobile-close">
+                              <CloseIcon/>
+                            </label>
+                            <ul className="nav__mobile-user-menu">
+                              <li className="nav__mobile-user-item">
+                                <a href className> Tài khoản của tôi</a>
+                              </li>
+                              <li className="nav__mobile-user-item">
+                                <a href className> Địa chỉ của tôi</a>
+                              </li>
+                              <li className="nav__mobile-user-item">
+                                <a href className> Đơn mua</a>
+                              </li>
+                              <li className="nav__mobile-user-item">
+                                <a href className> Đăng xuất</a>
+                              </li>
+                            </ul>
+                          </nav>
+                            <div className="items-center mt-3">
+                                <Link style={{display: 'flex',flexDirection:'column',justifyContent: 'center'}} to="/">
+                                    <Image src={logo} alt="logo" height={35} width={140} style={{display: 'flex',justifyContent: 'center'}}/>
                                 </Link>
                             </div>
                         </div>

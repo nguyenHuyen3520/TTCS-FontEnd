@@ -9,7 +9,8 @@
     justify-items: center  ;
     &__left{
         line-height: 50px;
-        cursor: pointer;        
+        cursor: pointer;   
+        width: auto;    
     }
     
     &__right{

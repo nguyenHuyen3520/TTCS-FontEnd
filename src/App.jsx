@@ -3,7 +3,7 @@ import { BrowserRouter, Route } from 'react-router-dom'
 import Header from './components/Header'
 import Navigate from './components/Navigate'
 import Routes from './routes/Routes'
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
 const App = () => {
   const [profile, setProfile] = useState();
   const path = useHistory()
@@ -15,7 +15,7 @@ const App = () => {
   return (
     <BrowserRouter>
       {
-        profile ? (
+        true ? (
           <div>
             <Header />
             <Route render={props => (

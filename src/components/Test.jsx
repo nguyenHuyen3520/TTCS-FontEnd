@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { upload } from "../firebase/firebase";
-
+import { upload, storage } from "../firebase/firebase";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 export default function Profile() {
     const [photo, setPhoto] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -15,10 +15,20 @@ export default function Profile() {
     }
 
     function handleClick() {
-        upload(photo, "test", setLoading);
+        upload(photo, "test123", setLoading);
     }
 
+    async function upload(file, name, setLoading) {
+        const fileRef = ref(storage, name + '.png');
 
+        setLoading(true);
+
+        const snapshot = await uploadBytes(fileRef, file);
+        const photoURL = await getDownloadURL(fileRef);
+        console.log("photoURL", photoURL);
+        console.log("snapshot", snapshot);
+        setLoading(false);
+    }
     return (
         <div className="fields">
             <input type="file" onChange={handleChange} />

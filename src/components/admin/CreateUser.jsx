@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Button from '@material-ui/core/Button';
@@ -10,7 +10,11 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom";
+import { upload, storage } from "../../firebase/firebase";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const validationSchema = yup.object({
     userName: yup
@@ -30,8 +34,14 @@ const validationSchema = yup.object({
     typeUser: yup.string(),
 });
 
-const CreateUser = ({ title }) => {
+const CreateUser = () => {
     const history = useHistory()
+    const [dataForm, setDataForm] = useState(null)
+    const [refresh, setRefresh] = useState(true)
+    const [data, setData] = useState(null)
+    const [photo, setPhoto] = useState("https://vnn-imgs-f.vgcloud.vn/2020/03/23/11/trend-avatar-11.jpg")
+    const [photoTemp, setPhotoTemp] = useState();
+    const [loading, setLoading] = useState(false);
     const formik = useFormik({
         initialValues: {
             userName: '',
@@ -44,93 +54,127 @@ const CreateUser = ({ title }) => {
         validationSchema: validationSchema,
         onSubmit: (values) => {
             console.log("value", values);
+            setDataForm((prevData) => {
+                const newData = { ...prevData, ...values, image: photo };
+                return newData;
+            })
+            console.log("dataForm", dataForm);
             const CreateUser = async () => {
-                const response = await AdminApi.createUser(values);
+                const response = await AdminApi.createUser(dataForm);
                 console.log("aaaa", response);
             }
             CreateUser();
-            history.push("/");
-            history.push("/admin-management-user");
+            const find = localStorage.getItem('refresh');
+            if (find) {
+                localStorage.setItem("refresh", !find);
+            } else {
+                localStorage.setItem("refresh", true);
+            }
         },
     });
+    function handleChange(e) {
+        console.log("vao handleChange", e.target)
+        if (e.target.files[0]) {
+            setPhotoTemp(e.target.files[0])
+        }
+    }
 
+    function handleClick() {
+        upload(photoTemp, data?.userName + "-" + Math.random().toFixed(6));
+    }
+
+    async function upload(file, name) {
+        const fileRef = ref(storage, name + '.png');
+        const snapshot = await uploadBytes(fileRef, file);
+        const photoURL = await getDownloadURL(fileRef);
+        setPhoto(photoURL);
+    }
     return (
         <Container>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "100px", width: "600px", color: 'black', backgroundColor: 'white', padding: '10px', marginLeft: '250px' }}>
-                <div>
-
-                    <h1 style={{ textAlign: 'center' }}>Add New User</h1>
-                    <form onSubmit={formik.handleSubmit}>
-                        <TextField
-                            fullWidth
-                            id="userName"
-                            name="userName"
-                            label="userName"
-                            value={formik.values.userName}
-                            onChange={formik.handleChange}
-                            error={formik.touched.userName && Boolean(formik.errors.userName)}
-                            helperText={formik.touched.userName && formik.errors.userName}
-                        />
-                        <TextField
-                            fullWidth
-                            id="email"
-                            name="email"
-                            label="Email"
-                            value={formik.values.email}
-                            onChange={formik.handleChange}
-                            error={formik.touched.email && Boolean(formik.errors.email)}
-                            helperText={formik.touched.email && formik.errors.email}
-                        />
-                        <TextField
-                            fullWidth
-                            id="password"
-                            name="password"
-                            label="Password"
-                            type="password"
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            error={formik.touched.password && Boolean(formik.errors.password)}
-                            helperText={formik.touched.password && formik.errors.password}
-                        />
-                        <TextField
-                            fullWidth
-                            id="passwordConfirmation"
-                            name="passwordConfirmation"
-                            label="passwordConfirmation"
-                            type="password"
-                            value={formik.values.passwordConfirmation}
-                            onChange={formik.handleChange}
-                            error={formik.touched.passwordConfirmation && Boolean(formik.errors.passwordConfirmation)}
-                            helperText={formik.touched.passwordConfirmation && formik.errors.passwordConfirmation}
-                        />
-                        <TextField
-                            fullWidth
-                            id="phone"
-                            name="phone"
-                            label="phone"
-                            value={formik.values.phone}
-                            onChange={formik.handleChange}
-                            error={formik.touched.phone && Boolean(formik.errors.phone)}
-                            helperText={formik.touched.phone && formik.errors.phone}
-                        />
-                        <FormLabel component="legend">TypeUser</FormLabel>
-                        <RadioGroup
-                            aria-label="gender"
-                            defaultValue=""
-                            name="typeUser"
-                        >
-                            <div className="flex items-center mx-auto">
-                                <FormControlLabel onChange={formik.handleChange} value="hoc_vien" control={<Radio />} label="Hoc_Vien" />
-                                <FormControlLabel onChange={formik.handleChange} value="giao_vien" control={<Radio />} label="Giao_Vien" />
-                                <FormControlLabel onChange={formik.handleChange} value="admin" control={<Radio />} label="Admin" />
-                            </div>
-                        </RadioGroup>
-                        <div style={{ marginTop: "10px" }}>
-                            <Button color="primary" variant="contained" fullWidth type="submit">
-                                Submit
-                            </Button>
+            <div style={{ marginTop: "100px", width: "900px", color: 'black', backgroundColor: 'white', padding: '10px', marginLeft: '100px' }}>
+                <h1 style={{ textAlign: 'center' }}>Thêm người dùng mới</h1>
+                <div className="flex">
+                    <div className="mr-3">
+                        <div style={{ width: '300px', height: '300px', backgroundImage: `url("${photo}")`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
                         </div>
-                    </form>
+                        <div className="">
+                            <input type="file" onChange={handleChange} />
+                            <button disabled={loading || !photoTemp} onClick={handleClick} className="p-2 px-4 text-white bg-cyan-500 my-2 rounded-xl">Upload</button>
+                        </div>
+                    </div>
+                    <div>
+                        <form onSubmit={formik.handleSubmit}>
+                            <TextField
+                                fullWidth
+                                id="userName"
+                                name="userName"
+                                label="userName"
+                                value={formik.values.userName}
+                                onChange={formik.handleChange}
+                                error={formik.touched.userName && Boolean(formik.errors.userName)}
+                                helperText={formik.touched.userName && formik.errors.userName}
+                            />
+                            <TextField
+                                fullWidth
+                                id="email"
+                                name="email"
+                                label="Email"
+                                value={formik.values.email}
+                                onChange={formik.handleChange}
+                                error={formik.touched.email && Boolean(formik.errors.email)}
+                                helperText={formik.touched.email && formik.errors.email}
+                            />
+                            <TextField
+                                fullWidth
+                                id="password"
+                                name="password"
+                                label="Password"
+                                type="password"
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                error={formik.touched.password && Boolean(formik.errors.password)}
+                                helperText={formik.touched.password && formik.errors.password}
+                            />
+                            <TextField
+                                fullWidth
+                                id="passwordConfirmation"
+                                name="passwordConfirmation"
+                                label="passwordConfirmation"
+                                type="password"
+                                value={formik.values.passwordConfirmation}
+                                onChange={formik.handleChange}
+                                error={formik.touched.passwordConfirmation && Boolean(formik.errors.passwordConfirmation)}
+                                helperText={formik.touched.passwordConfirmation && formik.errors.passwordConfirmation}
+                            />
+                            <TextField
+                                fullWidth
+                                id="phone"
+                                name="phone"
+                                label="phone"
+                                value={formik.values.phone}
+                                onChange={formik.handleChange}
+                                error={formik.touched.phone && Boolean(formik.errors.phone)}
+                                helperText={formik.touched.phone && formik.errors.phone}
+                            />
+                            <FormLabel component="legend">TypeUser</FormLabel>
+                            <RadioGroup
+                                aria-label="typeUser"
+                                defaultValue=""
+                                name="typeUser"
+                            >
+                                <div className="flex items-center mx-auto">
+                                    <FormControlLabel onChange={formik.handleChange} value="hoc_vien" control={<Radio />} label="Hoc_Vien" />
+                                    <FormControlLabel onChange={formik.handleChange} value="giao_vien" control={<Radio />} label="Giao_Vien" />
+                                    <FormControlLabel onChange={formik.handleChange} value="admin" control={<Radio />} label="Admin" />
+                                </div>
+                            </RadioGroup>
+                            <div style={{ marginTop: "10px" }}>
+                                <Button color="primary" variant="contained" fullWidth type="submit">
+                                    Submit
+                                </Button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </Container>

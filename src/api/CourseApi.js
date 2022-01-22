@@ -5,7 +5,6 @@ const header = {
 const CourseApi = {
     getCourse: (params) => {
         const url = '/course/' + params;
-        console.log("params", params);
         return axiosClient.get(url, header);
     },
     addUserToCourse: (params) => {
@@ -21,12 +20,10 @@ const CourseApi = {
         return axiosClient.post(url, params, header);
     },
     getListMyCourse: (params) => {
-        console.log("params", params);
         const url = "/list-myCourse";
         return axiosClient.post(url, params, header);
     },
     createSchedule: (params) => {
-        console.log("params", params);
         const url = "/create-schedule";
         return axiosClient.post(url, params, header);
     },
@@ -42,6 +39,10 @@ const CourseApi = {
     getUserOfCourse: (params) => {
         const url = "/get-user-of-course?course_id=" + params;
         return axiosClient.get(url, params, header);
+    },
+    changeSchedule: (params) => {
+        const url = "/changed-schedule";
+        return axiosClient.post(url, params, header);
     }
 }
 

@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FiEdit } from "react-icons/fi";
 import { AiFillDelete } from "react-icons/ai";
 import CreateUser from './CreateUser';
 import AdminApi from '../../api/AdminApi';
 import { useHistory } from "react-router-dom"
 import EditUser from './EditUser';
-import DetailtUser from './DetailtUser';
+import DetailUser from './DetailUser';
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -15,6 +15,14 @@ const MnUser = ({ data }) => {
     const [user, setUser] = React.useState({})
     const history = useHistory()
     const [listUser, setListUser] = React.useState([]);
+    const [refresh, setRefresh] = useState(false);
+    React.useEffect(() => {
+        const getData = async () => {
+            const response = await AdminApi.getListUser();
+            setListUser(response.listUser);
+        }
+        getData();
+    }, []);
     React.useEffect(() => {
         const getData = async () => {
             const response = await AdminApi.getListUser();
@@ -26,7 +34,12 @@ const MnUser = ({ data }) => {
     const handleOnChange = (e) => {
         setSearch(e.target.value);
     }
-
+    useEffect(() => {
+        let result = localStorage.getItem('refresh');
+        if (result) {
+            setRefresh(result)
+        }
+    })
     React.useEffect(() => {
         if (search === '') {
             const getData = async () => {
@@ -57,19 +70,16 @@ const MnUser = ({ data }) => {
         setIsEdit(true);
         setIsDetail(false);
         setUser(user);
-        console.log(user._id);
     }
     const handlerDetail = (user) => {
         setIsNew(false);
         setIsEdit(false);
         setIsDetail(true);
         setUser(user);
-        console.log(user);
     }
     const handlerDelete = (user, index) => {
         const deleteUser = async () => {
             const result = await AdminApi.deleteUser(user._id);
-            console.log(result);
             toast('Xóa user thành công!', {
                 position: "bottom-right",
                 autoClose: 3000,
@@ -106,13 +116,18 @@ const MnUser = ({ data }) => {
                         listUser.map((user, index) => (
                             <div key={index} style={{ display: 'flex', marginBottom: '10px', cursor: 'pointer', justifyContent: 'space-between' }} >
                                 <div style={{ display: 'flex', width: "100%" }} onClick={() => handlerDetail(user)}>
-                                    <div style={{ height: '30px', width: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', padding: '3px', cursor: 'pointer', backgroundImage: `url("${user.image}")`, backgroundSize: 'cover' }}>
+                                    <div className="relative" style={{ height: '30px', width: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', padding: '3px', cursor: 'pointer', backgroundImage: `url("${user.image}")`, backgroundSize: 'cover', marginTop: '10px' }}>
+                                        {
+                                            user.typeUser === 'admin' ? (<div className="absolute -top-2 -right-2 text-white bg-red-600 rounded-full">AD</div>) : user.typeUser === 'giao_vien' ? (<div className="absolute -top-2 -right-2 text-white bg-cyan-500 rounded-full">GV</div>) : null
+                                        }
                                     </div>
-                                    <div style={{ marginLeft: '10px' }}>
+                                    <div style={{ marginLeft: '20px' }}>
                                         <div>
-                                            {
-                                                user.userName
-                                            }
+                                            <div >
+                                                {
+                                                    user.userName
+                                                }
+                                            </div>
                                         </div>
                                         <div>
                                             {
@@ -120,9 +135,8 @@ const MnUser = ({ data }) => {
                                             }
                                         </div>
                                     </div>
-                                    <div style={{ paddingTop: '10px', marginLeft: '220px', color: `${user.typeUser === 'admin' ? "#ff0000" : "white"}` }}>{user.typeUser}</div>
                                 </div>
-                                <div className="MnUser__left__listUser__icons">
+                                <div className="MnUser__left__listUser__icons" style={{ marginTop: '10px' }}>
                                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }} onClick={() => handlerEdit(user)}>
                                         <FiEdit style={{ color: 'white' }} />
                                     </div>
@@ -143,7 +157,7 @@ const MnUser = ({ data }) => {
                     isEdit ? (<EditUser user={user} />) : null
                 }
                 {
-                    isDetail ? (<DetailtUser user={user} />) : null
+                    isDetail ? (<DetailUser user={user} />) : null
                 }
             </div>
             <ToastContainer />

@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "firebase/auth";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { getFirestore } from "firebase/firestore";
+
 const firebaseConfig = {
     apiKey: "AIzaSyCqFbDsEBA4EnGora8o2PRNfToshr8EuUQ",
     authDomain: "server-image-b9408.firebaseapp.com",
+    databaseURL: "https://server-image-b9408.firebaseio.com",
     projectId: "server-image-b9408",
     storageBucket: "server-image-b9408.appspot.com",
     messagingSenderId: "1069754456737",
@@ -15,7 +18,8 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+const auth = getAuth(app);
+const db = getFirestore(app);
 const storage = getStorage();
 
 export function signup(email, password) {
@@ -30,17 +34,4 @@ export function logout() {
     return signOut(auth);
 }
 
-// Custom Hook
-
-// Storage
-export async function upload(file, name, setLoading) {
-    const fileRef = ref(storage, name + '.png');
-
-    setLoading(true);
-
-    const snapshot = await uploadBytes(fileRef, file);
-    const photoURL = await getDownloadURL(fileRef);
-
-    setLoading(false);
-    alert("Uploaded file!");
-}
+export { auth, db, storage };

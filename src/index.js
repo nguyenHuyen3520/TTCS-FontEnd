@@ -6,10 +6,11 @@ import "swiper/css";
 import "swiper/css/pagination"
 import "swiper/css/navigation"
 import "./index.css"
+import 'antd/dist/antd.css';
 
 ReactDOM.render(
-  <React.StrictMode>    
-      <App />    
+  <React.StrictMode>
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );

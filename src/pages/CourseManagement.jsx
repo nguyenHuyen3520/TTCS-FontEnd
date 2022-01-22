@@ -107,7 +107,6 @@ const CourseManagement = () => {
         setIsEdit(true);
         setIsDetail(false);
         setCourse(value);
-        console.log(course);
     }
     const handlerDetail = (value) => {
         setIsNew(false);

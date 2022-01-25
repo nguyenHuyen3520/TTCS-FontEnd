@@ -101,8 +101,7 @@ const CourseManagement = () => {
         setIsEdit(false);
         setIsDetail(false);
     }
-    const handlerEdit = (value) => {
-        console.log("value", value);
+    const handlerEdit = (value) => {        
         setIsNew(false);
         setIsEdit(true);
         setIsDetail(false);
@@ -112,8 +111,7 @@ const CourseManagement = () => {
         setIsNew(false);
         setIsEdit(false);
         setIsDetail(true);
-        setCourse(value);
-        console.log(value);
+        setCourse(value);        
     }
     const handlerDelete = (user, index) => {
 

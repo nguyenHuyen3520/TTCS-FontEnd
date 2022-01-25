@@ -5,13 +5,12 @@ import { Link } from 'react-router-dom'
 // Import Swiper styles
 import 'swiper/css';
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { makeStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Paper from '@material-ui/core/Paper';
-import { alpha } from '@material-ui/core/styles'
 import { ViewState } from '@devexpress/dx-react-scheduler';
 import {
     Scheduler,
@@ -88,7 +87,6 @@ const DayScaleCell = (props) => {
 };
 
 const MyCourse = () => {
-    const [schedule, setSchedule] = useState()
     const [state, setState] = useState({
         data: [],
         currentDate: '2022-01-11',
@@ -107,7 +105,6 @@ const MyCourse = () => {
                 }
             )
             setListCourse(response.data);
-            console.log("listCourse", listCourse)
         }
         getData();
     }, [])
@@ -124,8 +121,8 @@ const MyCourse = () => {
                             <Swiper
                                 spaceBetween={50}
                                 slidesPerView={5}
-                                onSlideChange={() => console.log('slide change')}
-                                onSwiper={(swiper) => console.log(swiper)}
+                            // onSlideChange={() => console.log('slide change')}
+                            // onSwiper={(swiper) => console.log(swiper)}
                             >
                                 {
                                     listCourse.map((item, index) => (

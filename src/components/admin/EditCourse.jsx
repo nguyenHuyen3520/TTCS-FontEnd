@@ -93,9 +93,10 @@ const EditCourse = ({ course }) => {
             const teacherNow = getListTeacher.data.filter((item) => item._id === course.teacher_id)
             console.log("teacherNow", teacherNow);
             setFormData((prevData) => {
-                const newData = { ...prevData, teacher_name: teacherNow.userName }
+                const newData = { ...prevData, teacher_name: teacherNow[0].userName }
                 return newData;
             })
+            console.log("setFormData trong lan dau", formData);
             setListTeacher(getListTeacher.data);
             console.log("listTeacher", listTeacher);
             setListType(listCourseType);
@@ -108,7 +109,6 @@ const EditCourse = ({ course }) => {
             const list = await CourseApi.getUserOfCourse(course._id);
             setListUser(list.data);
             console.log("vao get 2")
-
         }
         getData();
     }, [course, check])
@@ -201,7 +201,9 @@ const EditCourse = ({ course }) => {
     }
 
     const submitForm = async () => {
+        console.log("formData", formData);
         const result = await AdminApi.updateCourse(formData);
+        console.log("result", result)
         toast(result.message, {
             position: "bottom-right",
             autoClose: 3000,
@@ -211,7 +213,7 @@ const EditCourse = ({ course }) => {
             draggable: true,
             progress: undefined,
         });
-
+        window.location.reload();
     }
     return (
         <div className="mx-4 my-20 p-2  flex " style={{ backgroundColor: '#ff9797' }}>
@@ -313,23 +315,6 @@ const EditCourse = ({ course }) => {
                 </div>
                 <div>
                     <div className="font-bold">
-                        Teacher:
-                    </div>
-                    <div className="p-2">
-                        <select name="typeUser" value={formData.typeCourse} className="p-3 min-w-full" onChange={(e) => setFormData((prevData) => {
-                            const newData = { ...prevData, typeUser: e.target.value }
-                            return newData;
-                        })}>
-                            {
-                                listTeacher?.map((item) => (
-                                    <option value={item.userName} name={item._id}>{item.userName}</option>
-                                ))
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <div className="font-bold">
                         typeCourses:
                     </div>
                     <div className="p-2">
@@ -340,14 +325,14 @@ const EditCourse = ({ course }) => {
                             })
                         }}>
                             {
-                                listType?.map((item) => (
-                                    <option value={item}>{item}</option>
+                                listType?.map((item, index) => (
+                                    <option value={item} key={index}>{item}</option>
                                 ))
                             }
                         </select>
                     </div>
                 </div>
-                <div className="mt-4">
+                <div className="mt-4" onClick={() => submitForm()}>
                     <div className="flex items-center justify-center border-2 p-3 bg-blue-600 text-white hover:text-red-300 hover:shadow-sm rounded-xl cursor-pointer w-1/2" >
                         Cập nhật
                     </div>

@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { Container } from '@mui/material';
 import userApi from '../api/userApi';
+import { useHistory } from "react-router-dom"
+import { auth, db } from "../firebase/firebase"
+import { setDoc, doc, Timestamp } from "firebase/firestore";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 const validationSchema = yup.object({
     userName: yup
         .string('Enter your user name').required('user name is required'),
@@ -23,29 +29,56 @@ const validationSchema = yup.object({
 });
 
 const Signup = () => {
+    const history = useHistory()
+    const [formData, setFormData] = useState({
+        userName: '',
+        email: '',
+        password: '',
+        passwordConfirmation: '',
+        phone: ''
+    })
     const formik = useFormik({
         initialValues: {
-            userName: '',
-            email: '',
-            password: '',
-            passwordConfirmation: '',
-            phone: ''
+            userName: formData.userName,
+            email: formData.email,
+            password: formData.password,
+            passwordConfirmation: formData.passwordConfirmation,
+            phone: formData.phone
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
-            const signup = async () => {
-                const response = await userApi.signup(values);
-
+        onSubmit: async (values) => {
+            const response = await userApi.signup(values);
+            toast(response.message, {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            if (response.success) {
+                const result = await createUserWithEmailAndPassword(auth, values.email, values.password);
+                await setDoc(doc(db, 'users', result.user.uid), {
+                    uid: result.user.uid,
+                    name: values.userName,
+                    email: values.email,
+                    createdAt: Timestamp.fromDate(new Date()),
+                    isOnline: false,
+                    avatar: "https://vnn-imgs-f.vgcloud.vn/2020/03/23/11/trend-avatar-11.jpg"
+                })
+                history.push("/login", { user: response.data })
+            } else {
+                setFormData(response.data);
             }
-            signup();
-
         },
     });
 
     return (
-        <Container>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "100px" }}>
-                <div>
+        // , background: 'linear-gradient(135deg, rgba(34,193,195,1) 0%,     rgba(253,187,45,1) 100%)'
+        <div className="form" style={{ background: 'rgb(34,193,195)', top: '0px', height: '100%', paddingTop: '150px' }}>
+            <Container style={{ maxWidth: '500px', minWidth: '300px', maxHeight: '700px', width: '30%', height: '60%', margin: 'auto', backgroundColor: '#FFFFFF', borderRadius: '25px', padding: '60px 60px' }}>
+                <div style={{}}>
 
                     <h1 className="font-bold text-5xl text-center mb-2">Register</h1>
                     <form onSubmit={formik.handleSubmit}>
@@ -108,8 +141,9 @@ const Signup = () => {
                         </div>
                     </form>
                 </div>
-            </div>
-        </Container>
+                <ToastContainer />
+            </Container>
+        </div>
     );
 };
 

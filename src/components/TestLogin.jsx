@@ -7,8 +7,7 @@ function TestLogin() {
 
     const [showloginButton, setShowloginButton] = useState(true);
     const [showlogoutButton, setShowlogoutButton] = useState(false);
-    const onLoginSuccess = (res) => {
-        console.log('Login Success:', res.profileObj);
+    const onLoginSuccess = (res) => {        
         setShowloginButton(false);
         setShowlogoutButton(true);
     };

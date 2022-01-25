@@ -7,8 +7,6 @@ const Show = ({ dataReceive, show, showList, setShowList, onHandleShowList, addI
     setValueName, setValuePrice, setValueType, setValueDesc, setValueImg
 
 }) => {
-    console.log('dataReceive', dataReceive)
-    console.log('EEEEEEEEE', valueName)
     const listFil = Object.values(dataReceive)
 
     const handleSubmit = (e) => {

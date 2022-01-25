@@ -29,20 +29,20 @@ const EditUser = ({ user }) => {
         }
         getData();
     }, [user, refresh])
-    const handlerDelete = async (course) => {
-        const response = await CourseApi.DeleteUserFromCourse({ Course_id: course._id, User_id: user._id });
-        console.log(response);
-        toast('Ban người dùng khỏi khóa học thành công!', {
-            position: "bottom-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
-        setRefresh(!refresh);
-    }
+    // const handlerDelete = async (course) => {
+    //     const response = await CourseApi.DeleteUserFromCourse({ Course_id: course._id, User_id: user._id });
+    //     console.log(response);
+    //     toast('Ban người dùng khỏi khóa học thành công!', {
+    //         position: "bottom-right",
+    //         autoClose: 3000,
+    //         hideProgressBar: false,
+    //         closeOnClick: true,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //         progress: undefined,
+    //     });
+    //     setRefresh(!refresh);
+    // }
 
     function handleChange(e) {
         if (e.target.files[0]) {

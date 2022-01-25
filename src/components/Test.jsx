@@ -25,8 +25,6 @@ export default function Profile() {
 
         const snapshot = await uploadBytes(fileRef, file);
         const photoURL = await getDownloadURL(fileRef);
-        console.log("photoURL", photoURL);
-        console.log("snapshot", snapshot);
         setLoading(false);
     }
     return (

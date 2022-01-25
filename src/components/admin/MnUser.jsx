@@ -8,7 +8,7 @@ import EditUser from './EditUser';
 import DetailUser from './DetailUser';
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { ToastContainer, toast } from 'react-toastify';
-
+import { db } from '../../firebase/firebase'
 import 'react-toastify/dist/ReactToastify.css';
 
 const MnUser = ({ data }) => {
@@ -80,15 +80,19 @@ const MnUser = ({ data }) => {
     const handlerDelete = (user, index) => {
         const deleteUser = async () => {
             const result = await AdminApi.deleteUser(user._id);
-            toast('Xóa user thành công!', {
-                position: "bottom-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            // const userDelete = db.collection('users').where('uid', '==', user.uid);
+            // userDelete.delete();
+            if (result.success) {
+                toast('Xóa user thành công!', {
+                    position: "bottom-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
         }
         deleteUser();
         setListUser((state) => {

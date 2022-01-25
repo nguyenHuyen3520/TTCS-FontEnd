@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-const ListCourse = ({ listCourse, col }) => {
-    console.log(col)
+const ListCourse = ({ listCourse, col }) => {    
     return (
         <div className={`grid grid-cols-6 gap-2`}>
             {

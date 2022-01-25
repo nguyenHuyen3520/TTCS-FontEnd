@@ -4,7 +4,6 @@ import CourseApi from '../api/CourseApi'
 import { BsCheckLg } from "react-icons/bs";
 import Image from '../components/Image';
 import { ToastContainer, toast } from 'react-toastify';
-
 import 'react-toastify/dist/ReactToastify.css';
 
 const Course = () => {
@@ -14,11 +13,9 @@ const Course = () => {
     useEffect(() => {
         const getData = async () => {
             const result = await CourseApi.getCourse(path.id);
-            setData(result.data);
-            console.log("data:", result.data)
+            setData(result.data);            
             const profile = JSON.parse(localStorage.getItem('profile'));
-            const check = await CourseApi.checkStatus({ Course_id: path.id, User_id: profile.id });
-            console.log(check.status);
+            const check = await CourseApi.checkStatus({ Course_id: path.id, User_id: profile.id });            
             setIsCheck(check.status);
         }
         getData();
@@ -35,12 +32,10 @@ const Course = () => {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-        });
-        console.log(response);
+        });        
     }
     const handlerDelete = async () => {
-        const profile = JSON.parse(localStorage.getItem('profile'));
-        console.log("profile: ", profile);
+        const profile = JSON.parse(localStorage.getItem('profile'));        
         setIsCheck(true);
         const response = await CourseApi.DeleteUserFromCourse({ Course_id: path.id, User_id: profile.id });
         toast('Hủy Đăng ký thành công!', {
@@ -51,8 +46,7 @@ const Course = () => {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-        });
-        console.log(response);
+        });        
     }
     return (
         <div className="p-12 pt-12 flex">

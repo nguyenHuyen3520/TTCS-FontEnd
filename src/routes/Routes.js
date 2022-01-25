@@ -5,6 +5,7 @@ import { Route, Switch } from 'react-router-dom'
 import Test from "../components/Test"
 import TestLogin from "../components/TestLogin"
 import Home from '../pages/Home'
+import Chat from '../pages/Chat'
 import UserManagement from '../pages/UserManagement'
 import CourseManagement from '../pages/CourseManagement'
 import Signup from '../pages/Signup'
@@ -22,6 +23,7 @@ const Routes = () => {
             <Route path='/test-login' exact component={TestLogin} />
             <Route path='/signup' exact component={Signup} />
             <Route path='/login' exact component={Login} />
+            <Route path='/chat' exact component={Chat} />
             <Route path='/courses' exact component={Courses} />
             <Route path='/myCourse' exact component={MyCourse} />
             <Route path='/course/:id' exact component={Course} />
@@ -33,4 +35,5 @@ const Routes = () => {
 }
 
 export default Routes
+
 

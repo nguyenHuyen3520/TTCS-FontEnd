@@ -11,11 +11,12 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { useHistory } from "react-router-dom";
-import { upload, storage } from "../../firebase/firebase";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { auth, db, storage } from "../../firebase/firebase"
+import { setDoc, doc, Timestamp } from "firebase/firestore";
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 const validationSchema = yup.object({
     userName: yup
         .string('Enter your user name').required('user name is required'),
@@ -33,9 +34,9 @@ const validationSchema = yup.object({
         .number().required('phone is required'),
     typeUser: yup.string(),
 });
-
 const CreateUser = () => {
     const history = useHistory()
+    const [errForm, setErrForm] = useState(null)
     const [dataForm, setDataForm] = useState(null)
     const [refresh, setRefresh] = useState(true)
     const [data, setData] = useState(null)
@@ -52,24 +53,43 @@ const CreateUser = () => {
             typeUser: '',
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
-            console.log("value", values);
+        onSubmit: async (values) => {
             setDataForm((prevData) => {
                 const newData = { ...prevData, ...values, image: photo };
                 return newData;
             })
             console.log("dataForm", dataForm);
-            const CreateUser = async () => {
-                const response = await AdminApi.createUser(dataForm);
-                console.log("aaaa", response);
+            const response = await AdminApi.createUser(dataForm);
+            if (response.success) {
+                const result = await createUserWithEmailAndPassword(auth, values.email, values.password);
+                const updateUser = await AdminApi.updateUser({ uid: result.uid, _id: response.data._id })
+                await setDoc(doc(db, 'users', result.user.uid), {
+                    uid: result.user.uid,
+                    name: values.userName,
+                    email: values.email,
+                    createdAt: Timestamp.fromDate(new Date()),
+                    isOnline: false,
+                    avatar: dataForm.image
+                })
+            } else {
+                setErrForm(response.message);
             }
-            CreateUser();
+            console.log("response", response);
             const find = localStorage.getItem('refresh');
             if (find) {
                 localStorage.setItem("refresh", !find);
             } else {
                 localStorage.setItem("refresh", true);
             }
+            toast('Tạo tài khoản thành công!', {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         },
     });
     function handleChange(e) {
@@ -104,6 +124,7 @@ const CreateUser = () => {
                     </div>
                     <div>
                         <form onSubmit={formik.handleSubmit}>
+                            <div>{errForm}</div>
                             <TextField
                                 fullWidth
                                 id="userName"
@@ -176,6 +197,7 @@ const CreateUser = () => {
                         </form>
                     </div>
                 </div>
+                <ToastContainer />
             </div>
         </Container>
     );

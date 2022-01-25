@@ -1,6 +1,8 @@
 import axiosClient from "./axiosClient";
 const header = {
-    Authorization: "Bearer " + localStorage.getItem("accessToken")
+    Authorization: "Bearer " + localStorage.getItem("accessToken"),
+    'Content-Type': 'application/json',
+    Accept: 'application/json'
 }
 const AdminApi = {
     getListUser: () => {

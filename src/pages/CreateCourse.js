@@ -4,9 +4,9 @@ import * as yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { Container } from '@mui/material';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from "@mui/material/InputLabel";
+// import Select from '@mui/material/Select';
+// import MenuItem from '@mui/material/MenuItem';
+// import InputLabel from "@mui/material/InputLabel";
 import AdminApi from '../api/AdminApi';
 import { useHistory } from "react-router-dom"
 const validationSchema = yup.object({
@@ -29,9 +29,9 @@ const CreateCourse = () => {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            const createCourse = async()=>{
+            const createCourse = async () => {
                 const response = await AdminApi.createCourse(values);
-                console.log(response.name);
+                console.log("response", response);
             }
             createCourse();
             history.push("/");
@@ -40,7 +40,7 @@ const CreateCourse = () => {
     });
     const handleChangeSelect = (event) => {
         setTypeCourse(event.target.value);
-      };
+    };
     return (
         <Container>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "100px" }}>

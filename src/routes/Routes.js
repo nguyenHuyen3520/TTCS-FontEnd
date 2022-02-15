@@ -32,7 +32,7 @@ const Routes = () => {
             <Route path='/admin-management-user' exact component={UserManagement} />
             <Route path='/admin-management-course' exact component={CourseManagement} />
             <Route path='/admin-create-course' exact component={CreateCourse} />
-            <Route path='/Meet' exact component={MainScreen} />
+            <Route path='/meet' exact component={MainScreen} />
         </Switch>
     )
 }

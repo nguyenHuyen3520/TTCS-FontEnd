@@ -1,5 +1,5 @@
-import MainScreen from "./components/MainScreen/MainScreen.component";
-import { firepadRef, db, userName } from "./firebase/firebase";
+import { firepadRef, database, userName } from "./firebase/firebase";
+import { ref, set, child, push, onValue, onDisconnect } from "firebase/database";
 import { useEffect } from "react";
 import {
   setMainStream,
@@ -21,42 +21,41 @@ function App(props) {
     return localStream;
   };
   useEffect(async () => {
+    console.log('userName trong app', userName)
     const stream = await getUserStream();
     stream.getVideoTracks()[0].enabled = false;
     props.setMainStream(stream);
-
-    connectedRef.on("value", (snap) => {
+    onValue(connectedRef, (snap) => {
+      console.log('nap', snap.val())
       if (snap.val()) {
         const defaultPreference = {
           audio: true,
           video: false,
           screen: false,
         };
-        const userStatusRef = participantRef.push({
+        const userStatusRef = push(participantRef, {
           userName,
           preferences: defaultPreference,
         });
         props.setUser({
           [userStatusRef.key]: { name: userName, ...defaultPreference },
         });
-        userStatusRef.onDisconnect().remove();
+        onDisconnect(userStatusRef).remove();
       }
     });
   }, []);
 
-  const connectedRef = db.database().ref(".info/connected");
-  const participantRef = firepadRef.child("participants");
+  const connectedRef = ref(database, ".info/connected");
+  const participantRef = child(firepadRef, "participants");
 
   const isUserSet = !!props.user;
   const isStreamSet = !!props.stream;
 
   useEffect(() => {
     if (isStreamSet && isUserSet) {
-      participantRef.on("child_added", (snap) => {
-        const preferenceUpdateEvent = participantRef
-          .child(snap.key)
-          .child("preferences");
-        preferenceUpdateEvent.on("child_changed", (preferenceSnap) => {
+      onValue(participantRef, (snap) => {
+        const preferenceUpdateEvent = child(child(participantRef, snap.key), "preferences");
+        onValue(preferenceUpdateEvent, (preferenceSnap) => {
           props.updateParticipant({
             [snap.key]: {
               [preferenceSnap.key]: preferenceSnap.val(),
@@ -71,7 +70,7 @@ function App(props) {
           },
         });
       });
-      participantRef.on("child_removed", (snap) => {
+      onValue(participantRef, (snap) => {
         props.removeParticipant(snap.key);
       });
     }

@@ -1,24 +1,20 @@
 import { firepadRef } from "../firebase/firebase";
 import { store } from "../index";
-import { child } from 'firebase/database'
+import { child, update, onValue, push, set } from 'firebase/database'
 const participantRef = child(firepadRef, 'participant')
 
 export const updatePreference = (userId, preference) => {
-  const currentParticipantRef = participantRef
-    .child(userId)
-    .child("preferences");
+  const currentParticipantRef = child(child(participantRef, userId), "preferences");
   setTimeout(() => {
-    currentParticipantRef.update(preference);
+    update(currentParticipantRef, preference);
   });
 };
 
 export const createOffer = async (peerConnection, receiverId, createdID) => {
-  const currentParticipantRef = participantRef.child(receiverId);
+  const currentParticipantRef = child(participantRef, receiverId);
   peerConnection.onicecandidate = (event) => {
     event.candidate &&
-      currentParticipantRef
-        .child("offerCandidates")
-        .push({ ...event.candidate.toJSON(), userId: createdID });
+      push(child(currentParticipantRef, "offerCandidates"), { ...event.candidate.toJSON(), userId: createdID });
   };
 
   const offerDescription = await peerConnection.createOffer();
@@ -30,13 +26,13 @@ export const createOffer = async (peerConnection, receiverId, createdID) => {
     userId: createdID,
   };
 
-  await currentParticipantRef.child("offers").push().set({ offer });
+  await set(push(child(currentParticipantRef, "offers")), { offer });
 };
 
 export const initializeListensers = async (userId) => {
-  const currentUserRef = participantRef.child(userId);
+  const currentUserRef = child(participantRef, userId);
 
-  currentUserRef.child("offers").on("child_added", async (snapshot) => {
+  onValue(child(currentUserRef, "offers"), async (snapshot) => {
     const data = snapshot.val();
     if (data?.offer) {
       const pc =
@@ -46,15 +42,16 @@ export const initializeListensers = async (userId) => {
     }
   });
 
-  currentUserRef.child("offerCandidates").on("child_added", (snapshot) => {
+  onValue(child(currentUserRef, "offerCandidates"), (snapshot) => {
     const data = snapshot.val();
+    console.log('data', data)
     if (data.userId) {
       const pc = store.getState().participants[data.userId].peerConnection;
       pc.addIceCandidate(new RTCIceCandidate(data));
     }
   });
 
-  currentUserRef.child("answers").on("child_added", (snapshot) => {
+  onValue(child(currentUserRef, "answers"), (snapshot) => {
     const data = snapshot.val();
     if (data?.answer) {
       const pc =
@@ -64,7 +61,7 @@ export const initializeListensers = async (userId) => {
     }
   });
 
-  currentUserRef.child("answerCandidates").on("child_added", (snapshot) => {
+  onValue(child(currentUserRef, "answerCandidates"), (snapshot) => {
     const data = snapshot.val();
     if (data.userId) {
       const pc = store.getState().participants[data.userId].peerConnection;
@@ -75,12 +72,10 @@ export const initializeListensers = async (userId) => {
 
 const createAnswer = async (otherUserId, userId) => {
   const pc = store.getState().participants[otherUserId].peerConnection;
-  const participantRef1 = participantRef.child(otherUserId);
+  const participantRef1 = child(participantRef, otherUserId);
   pc.onicecandidate = (event) => {
     event.candidate &&
-      participantRef1
-        .child("answerCandidates")
-        .push({ ...event.candidate.toJSON(), userId: userId });
+      push(child(participantRef1, "answerCandidates"), { ...event.candidate.toJSON(), userId: userId });
   };
 
   const answerDescription = await pc.createAnswer();
@@ -92,5 +87,5 @@ const createAnswer = async (otherUserId, userId) => {
     userId: userId,
   };
 
-  await participantRef1.child("answers").push().set({ answer });
+  await set(push(child(participantRef1, "answers")), { answer });
 };

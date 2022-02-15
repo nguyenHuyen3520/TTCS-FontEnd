@@ -1,20 +1,35 @@
 import React, { useRef, useEffect } from "react";
+import { firepadRef, database, userName, getMeet } from "../../firebase/firebase";
+import { ref, set, child, push, onValue, onDisconnect } from "firebase/database";
 import MeetingFooter from "../MeetingFooter/MeetingFooter.component";
 import Participants from "../Participants/Participants.component";
 import "./MainScreen.css";
 import { connect } from "react-redux";
-import { setMainStream, updateUser } from "../../store/actioncreator";
+import {
+  setMainStream, updateUser,
+  addParticipant,
+  setUser,
+  removeParticipant,
+  updateParticipant,
+} from "../../store/actioncreator";
 
 const MainScreen = (props) => {
-  const participantRef = useRef(props.participants);
+
+  const connectedRef = ref(database, ".info/connected");
+  const participantRef = child(firepadRef, "participants");
+  console.log('vao day', connectedRef)
+  const isUserSet = !!props.user;
+  const isStreamSet = !!props.stream;
 
   const onMicClick = (micEnabled) => {
     if (props.stream) {
       props.stream.getAudioTracks()[0].enabled = micEnabled;
+      console.log('vao day', micEnabled);
       props.updateUser({ audio: micEnabled });
     }
   };
   const onVideoClick = (videoEnabled) => {
+    console.log("onVideoClick", videoEnabled);
     if (props.stream) {
       props.stream.getVideoTracks()[0].enabled = videoEnabled;
       props.updateUser({ video: videoEnabled });
@@ -72,13 +87,73 @@ const MainScreen = (props) => {
 
     props.updateUser({ screen: true });
   };
+  const getUserStream = async () => {
+    const localStream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: true,
+    });
+
+    return localStream;
+  };
+  useEffect(async () => {
+    getMeet()
+    console.log('userName trong app', userName)
+    const stream = await getUserStream();
+    stream.getVideoTracks()[0].enabled = false;
+    props.setMainStream(stream);
+    onValue(connectedRef, (snap) => {
+      console.log('nap', snap.val())
+      if (snap.val()) {
+        const defaultPreference = {
+          audio: true,
+          video: false,
+          screen: false,
+        };
+        const userStatusRef = push(participantRef, {
+          userName,
+          preferences: defaultPreference,
+        });
+        props.setUser({
+          [userStatusRef.key]: { name: userName, ...defaultPreference },
+        });
+        onDisconnect(userStatusRef).remove();
+      }
+    });
+  }, []);
+
+
+
+  useEffect(() => {
+    if (isStreamSet && isUserSet) {
+      onValue(participantRef, (snap) => {
+        const preferenceUpdateEvent = child(child(participantRef, snap.key), "preferences");
+        onValue(preferenceUpdateEvent, (preferenceSnap) => {
+          props.updateParticipant({
+            [snap.key]: {
+              [preferenceSnap.key]: preferenceSnap.val(),
+            },
+          });
+        });
+        const { userName: name, preferences = {} } = snap.val();
+        props.addParticipant({
+          [snap.key]: {
+            name,
+            ...preferences,
+          },
+        });
+      });
+      onValue(participantRef, (snap) => {
+        props.removeParticipant(snap.key);
+      });
+    }
+  }, [isStreamSet, isUserSet]);
   return (
-    <div className="wrapper-meet">
-      <div className="main-screen-meet">
+    <div className="wrapper">
+      <div className="main-screen">
         <Participants />
       </div>
 
-      <div className="footer-meet">
+      <div className="footer">
         <MeetingFooter
           onScreenClick={onScreenClick}
           onMicClick={onMicClick}
@@ -94,6 +169,7 @@ const mapStateToProps = (state) => {
     stream: state.mainStream,
     participants: state.participants,
     currentUser: state.currentUser,
+    user: state.currentUser,
   };
 };
 
@@ -101,6 +177,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setMainStream: (stream) => dispatch(setMainStream(stream)),
     updateUser: (user) => dispatch(updateUser(user)),
+    addParticipant: (user) => dispatch(addParticipant(user)),
+    setUser: (user) => dispatch(setUser(user)),
+    removeParticipant: (userId) => dispatch(removeParticipant(userId)),
+    updateParticipant: (user) => dispatch(updateParticipant(user)),
   };
 };
 

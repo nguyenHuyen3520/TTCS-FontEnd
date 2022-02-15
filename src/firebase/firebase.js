@@ -20,18 +20,22 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage();
 const database = getDatabase();
-const profile = JSON.parse(localStorage.getItem('profile'));
-var firepadRef = ref(getDatabase());
-// export const userName = profile?.userName
-export const userName = prompt("What's your name?");
-const urlparams = new URLSearchParams(window.location.search);
-const roomId = urlparams.get("id");
+export const userName = 'test';
 
-if (roomId) {
-    firepadRef = child(firepadRef, '/' + roomId);
-} else {
-    firepadRef = push(firepadRef);
-    window.history.replaceState(null, "Meet", "?id=" + firepadRef.key);
+const profile = JSON.parse(localStorage.getItem('profile'));
+var firepadRef = ref(database);
+const getMeet = () => {
+    const urlparams = new URLSearchParams(window.location.search);
+    const roomId = urlparams.get("id");
+
+    if (roomId) {
+        console.log('vao 1')
+        firepadRef = child(firepadRef, roomId);
+    } else {
+        console.log('vao 2')
+        firepadRef = push(firepadRef);
+        window.history.replaceState(null, "meet", "?id=" + firepadRef.key);
+    }
 }
 
 export function signup(email, password) {
@@ -46,4 +50,4 @@ function logout() {
     return signOut(auth);
 }
 
-export { auth, db, storage, logout, app, firepadRef };
+export { auth, db, database, storage, logout, app, firepadRef, getMeet };

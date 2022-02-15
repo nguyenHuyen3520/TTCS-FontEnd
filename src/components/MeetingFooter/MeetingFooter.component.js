@@ -17,6 +17,7 @@ const MeetingFooter = (props) => {
   });
   const micClick = () => {
     setStreamState((currentState) => {
+      console.log('currentState', currentState);
       return {
         ...currentState,
         mic: !currentState.mic,
@@ -26,6 +27,7 @@ const MeetingFooter = (props) => {
 
   const onVideoClick = () => {
     setStreamState((currentState) => {
+      console.log('currentState', currentState);
       return {
         ...currentState,
         video: !currentState.video,
@@ -46,15 +48,19 @@ const MeetingFooter = (props) => {
     });
   };
   useEffect(() => {
-    props.onMicClick(streamState.mic);
-  }, [streamState.mic]);
+    if (streamState.mic) {
+      props.onMicClick(streamState.mic);
+    }
+  }, [streamState.mic, props]);
   useEffect(() => {
-    props.onVideoClick(streamState.video);
-  }, [streamState.video]);
+    if (streamState.video) {
+      props.onVideoClick(streamState.video);
+    }
+  }, [streamState.video, props]);
   return (
     <div className="meeting-footer">
       <div
-        className={"meeting-icons " + (!streamState.mic ? "active" : "")}
+        className={`meeting-icons  ${!streamState.mic ? "active" : ""}`}
         data-tip={streamState.mic ? "Mute Audio" : "Unmute Audio"}
         onClick={micClick}
       >
@@ -64,7 +70,7 @@ const MeetingFooter = (props) => {
         />
       </div>
       <div
-        className={"meeting-icons " + (!streamState.video ? "active" : "")}
+        className={`meeting-icons ${!streamState.video ? "active" : ""}`}
         data-tip={streamState.video ? "Hide Video" : "Show Video"}
         onClick={onVideoClick}
       >

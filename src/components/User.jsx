@@ -22,8 +22,8 @@ const User = ({ user1, user, selectUser, chat }) => {
                 onClick={() => selectUser(user)}
             >
                 <div className="user_info">
-                    <div className="user_detail">
-                        <img src={user.avatar || Img} alt="avatar" className="avatar" />
+                    <div className="user_detail flex">
+                        <img src={user.avatar || Img} alt="avatar" className="avatar mr-2" />
                         <h4 className="text-black font-bold text-xl">{user.name}</h4>
                         {data?.from !== user1 && data?.unread && (
                             <small className="unread">New</small>

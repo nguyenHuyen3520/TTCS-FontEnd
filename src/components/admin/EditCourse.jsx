@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { FormControl, TextField, Button, Box, Modal, InputLabel, Select, MenuItem } from '@mui/material';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import { upload, storage } from "../../firebase/firebase";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import AddIcon from '@mui/icons-material/Add';
+import { Modal } from '@mui/material';
+import { storage } from "../../firebase/firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import 'react-calendar/dist/Calendar.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import DateTimePicker, { format } from 'react-datetime-picker';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import Paper from '@material-ui/core/Paper';
 import { ViewState, EditingState } from '@devexpress/dx-react-scheduler';
-import { GrAdd } from "react-icons/gr";
-import { FaPlusCircle } from "react-icons/fa";
+import moment from 'moment'
 import {
     Scheduler,
     Appointments,
@@ -24,26 +19,17 @@ import {
     ConfirmationDialog,
     Toolbar,
     DateNavigator,
-
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { AppointmentTooltip } from '@devexpress/dx-react-scheduler-material-ui';
 import CourseApi from '../../api/CourseApi';
 import AdminApi from '../../api/AdminApi'
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
 
 const EditCourse = ({ course }) => {
-    const [date, setDate] = useState(new Date())
-    const [value, onChange] = useState(new Date());
+    // const [date, setDate] = useState(moment().format("YYYY-MM-DD"))
+    // const [timeStart, setTimeStart] = useState()
+    // const [timeEnd, setTimeEnd] = useState()
+    // const [value, onChange] = useState(new Date());
+    // const [checkAdd, setCheckAdd] = useState(false)
     const [listTeacher, setListTeacher] = useState(null)
     const [listType, setListType] = useState();
     const [photo, setPhoto] = useState(course.image)
@@ -65,6 +51,7 @@ const EditCourse = ({ course }) => {
     const [openCal, setOpenCal] = React.useState(false);
     const handleOpenCal = () => setOpenCal(true);
     const handleCloseCal = () => setOpenCal(false);
+    const [scheduleDataTemp, setScheduleDataTemp] = useState(null)
     const [state, setState] = useState({
         data: [],
         currentDate: '2022-01-17',
@@ -73,7 +60,6 @@ const EditCourse = ({ course }) => {
         appointmentChanges: {},
         editingAppointment: undefined,
     })
-
     useEffect(() => {
         setPhoto(course.image);
         setFormData({
@@ -91,14 +77,11 @@ const EditCourse = ({ course }) => {
             const listCourseType = listCourse.data.map((item) => item.nameType);
             const getListTeacher = await AdminApi.getListUserOfType({ typeUser: 'giao_vien' });
             const teacherNow = getListTeacher.data.filter((item) => item._id === course.teacher_id)
-            console.log("teacherNow", teacherNow);
             setFormData((prevData) => {
                 const newData = { ...prevData, teacher_name: teacherNow[0].userName }
                 return newData;
             })
-            console.log("setFormData trong lan dau", formData);
             setListTeacher(getListTeacher.data);
-            console.log("listTeacher", listTeacher);
             setListType(listCourseType);
             setState(
                 (prevData) => {
@@ -106,22 +89,56 @@ const EditCourse = ({ course }) => {
                     return newState;
                 }
             )
+            setScheduleDataTemp(scheduleData.data.schedule);
             const list = await CourseApi.getUserOfCourse(course._id);
             setListUser(list.data);
-            console.log("vao get 2")
         }
         getData();
     }, [course, check])
+    useEffect(() => {
+        if (scheduleDataTemp) {
+            setState(
+                (prevData) => {
+                    const newState = { ...prevData, data: scheduleDataTemp }
+                    return newState;
+                }
+            )
+        }
+    }, [scheduleDataTemp])
+
     const commitChanges = async ({ added, changed, deleted }) => {
         setState(async (state) => {
+            console.log("vao 1")
+            console.log("deleted", deleted)
             let { data } = state;
+            console.log("data", data)
             if (added) {
-                const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
-                data = [...data, { id: startingAddedId, ...added }];
+                console.log("vao 2 added:", added)
+                console.log("start", moment(added.startDate, "YYYY-MM-DD:hh-mm-ss").format().split("").splice(0, 19).join(""))
+                const newDate = {
+                    _id: "61ddd050c822712e08211279",
+                    title: added.title,
+                    startDate: moment(added.startDate, "YYYY-MM-DD:hh-mm-ss").format().split("").splice(0, 19).join(""),
+                    endDate: moment(added.endDate, "YYYY-MM-DD:hh-mm-ss").format().split("").splice(0, 19).join(""),
+                };
+                console.log("newDate: ", newDate);
+                setScheduleDataTemp((prevState) => {
+                    const newData = prevState.push(newDate)
+                    return newData;
+                })
+                console.log("scheduleDataTemp", scheduleDataTemp)
+                const response = await AdminApi.addSchedule({ course_id: course._id, newSchedule: scheduleDataTemp });
+                console.log("response", response)
+                data = response.data;
+                console.log("scheduleDataTemp trong add", data);
+                console.log("response", response);
             }
+
             if (changed) {
+                console.log("vao 3")
                 data = data.map(appointment => (
-                    appointment._id === state.editingAppointment._id ? { ...appointment, ...changed.undefined } : appointment));
+                    appointment._id === state.editingAppointment._id ? { ...appointment, ...changed.undefined } : appointment
+                ));
                 const values = {
                     data: data,
                     course_id: course._id,
@@ -141,8 +158,11 @@ const EditCourse = ({ course }) => {
                 toasts();
                 setCheck(!check);
             }
+
             if (deleted !== undefined) {
-                data = data.filter(appointment => appointment.id !== deleted);
+                console.log("vao 4")
+                console.log("vao day va deleted", deleted);
+                data = data.filter(appointment => appointment._id !== deleted);
             }
 
             const newState = { ...state, data: data };
@@ -150,6 +170,7 @@ const EditCourse = ({ course }) => {
         });
 
     }
+
     const changeAddedAppointment = (addedAppointment) => {
         setState(
             (prevData) => {
@@ -201,9 +222,7 @@ const EditCourse = ({ course }) => {
     }
 
     const submitForm = async () => {
-        console.log("formData", formData);
         const result = await AdminApi.updateCourse(formData);
-        console.log("result", result)
         toast(result.message, {
             position: "bottom-right",
             autoClose: 3000,
@@ -230,42 +249,7 @@ const EditCourse = ({ course }) => {
                     <div className="mx-2">
                         <CalendarTodayIcon sx={{ fontSize: 25 }} onClick={handleOpen} />
                     </div>
-                    <div className="text-white">
-                        <FaPlusCircle fontSize={25} color="white" onClick={() => console.log("da click")} />
-                    </div>
                 </div>
-                {/* <div className="font-bold text-xl mr-3 px-5 cursor-pointer" onClick={() => setShowListUser(!showListUser)}>
-                    <div>
-                        <Modal
-                            open={openCal}
-                            onClose={handleCloseCal}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                            className="border-none"
-                        >
-                            <div className="bg-white h-52 flex">
-                                <DateTimePicker
-                                    onChange={(e) => {
-                                        onChange(e);
-                                    }}
-                                    value={value}
-                                    format="y-MM-dd h:mm:ss a"
-                                />
-                                <div>Thời gian đã chọn: </div>
-                            </div>
-                        </Modal>
-                    </div>
-                    {
-                        showListUser ? (<div>
-                            {
-                                listUser?.map((item, index) => (
-                                    <div key={index}>{item.name}</div>
-                                ))
-                            }
-                        </div>) : null
-                    }
-
-                </div> */}
             </div>
             <div className="text-xl px-3 w-full">
                 <div>
@@ -347,26 +331,6 @@ const EditCourse = ({ course }) => {
                     className="border-none"
                 >
                     <div className="shadow-2xl mt-8 px-32 border-none">
-                        {/* <Paper>
-                            <Scheduler
-                                data={state.data}
-                                locale={state.locale}
-                                height={700}
-                            >
-                                <ViewState
-                                // defaultCurrentDate={currentDate}
-                                />
-                                <WeekView
-                                    startDayHour={17}
-                                    endDayHour={22}
-                                />
-                                <Toolbar />
-                                <DateNavigator />
-                                <Appointments />
-                                <AllDayPanel
-                                />
-                            </Scheduler>
-                        </Paper> */}
                         <Paper>
                             <Scheduler
                                 data={state.data}
@@ -411,3 +375,4 @@ const EditCourse = ({ course }) => {
 }
 
 export default EditCourse
+

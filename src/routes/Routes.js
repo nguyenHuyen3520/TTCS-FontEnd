@@ -14,6 +14,8 @@ import CreateCourse from '../pages/CreateCourse'
 import Courses from '../components/Courses'
 import Course from '../pages/Course'
 import MyCourse from '../pages/MyCourse'
+import MainScreen from '../components/MainScreen/MainScreen.component'
+// import CallPage from '../components/callPage/CallPage'
 
 const Routes = () => {
     return (
@@ -30,6 +32,7 @@ const Routes = () => {
             <Route path='/admin-management-user' exact component={UserManagement} />
             <Route path='/admin-management-course' exact component={CourseManagement} />
             <Route path='/admin-create-course' exact component={CreateCourse} />
+            <Route path='/Meet' exact component={MainScreen} />
         </Switch>
     )
 }

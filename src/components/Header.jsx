@@ -14,7 +14,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { auth, db, logout } from "../firebase/firebase"
 import { setDoc, doc, Timestamp, updateDoc } from "firebase/firestore";
 import { signOut as signOutFirebase } from 'firebase/auth'
-
+import { IoMdNotifications } from "react-icons/io";
+import CourseApi from '../api/CourseApi'
 const clientId = "204968990099-vnh6f6s4rgcte95ul3o12qs6polbik4p.apps.googleusercontent.com";
 
 const Header = () => {
@@ -23,20 +24,25 @@ const Header = () => {
     })
     const path = useParams();
     const history = useHistory()
+    const [keyWord, setKeyWord] = useState('');
     const [profile, setProfile] = useState(JSON.parse(localStorage.getItem('profile')));
+    const [listResult, setListResult] = useState([])
     useEffect(() => {
         const profile = JSON.parse(localStorage.getItem('profile'));
         setProfile(profile);
     }, [path]);
+
+    useEffect(async () => {
+        const result = await CourseApi.search(keyWord);
+        setListResult(result.data);
+    }, [keyWord])
     const handlerLogout = async () => {
         await updateDoc(doc(db, "users", profile.uid), {
             isOnline: false
         })
         const refresh = JSON.parse(localStorage.getItem('refresh'));
         localStorage.setItem('refresh', !refresh)
-        console.log("profile", profile)
         if (profile.isGoogle) {
-            console.log("vao day")
             signOut();
         }
         localStorage.removeItem('profile');
@@ -53,23 +59,47 @@ const Header = () => {
         <div style={{ background: 'linear-gradient(120deg, #2980b9, #8e44ad)', color: "#fff" }}>
             <div className="header">
                 <div className="header__left flex ">
-                    <label htmlFor="nav__mobile-input" className="nav__bars-btn">
-                        <MenuIcon style={{ color: '#FFFFFF' }} class="nav__bars-btn-1" />
-                    </label>
-                    <div className="items-center mt-3">
+                    <div className="mr-2">
+                        <MenuIcon />
+                    </div>
+                    <div className="items-center">
                         <Link style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} to="/">
-                            <Image src={logo} alt="logo" height={35} width={140} style={{ display: 'flex', justifyContent: 'center' }} />
+                            <Image src={logo} alt="logo" height={35} width={140} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white' }} />
                         </Link>
                     </div>
                 </div>
                 <div className="header__right">
                     <div className="header__right__search">
                         <form>
-                            <input type="text" placeholder="Enter keys" />
+                            <input type="text" placeholder="Enter keys" value={keyWord} onChange={(e) => { setKeyWord(e.target.value) }} />
                             <div className="header__right__search__icon" style={{ border: ' none !important' }}>
                                 <SearchIcon />
                             </div>
                         </form>
+                        {
+                            keyWord !== "" ? (
+                                <div className="header__right__search__result">
+                                    <div>
+                                        <div>
+                                            Bạn đang tìm kiếm "{keyWord}"
+                                        </div>
+                                        <div className="border-b-2">
+                                            Có <span style={{ color: 'red', fontWeight: 'bold', fontSize: '20px' }}> {listResult?.length}</span> kết quả tìm kiếm được
+                                        </div>
+                                        <div>
+                                            {listResult?.map((item, index) => (
+                                                <Link to={`/course/${item._id}`} key={index} className="flex p-3 result__item cursor-pointer" onClick={() => setKeyWord("")}>
+                                                    <div style={{ width: '50px', height: '50px', marginRight: '10px' }}>
+                                                        <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%' }} />
+                                                    </div>
+                                                    <div className="flex justify-center items-center">{item.name}</div>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : null
+                        }
                     </div>
                     <div>
                         {
@@ -99,6 +129,9 @@ const Header = () => {
                                             </div>
                                         </button>)
                                     }
+                                    <div style={{ marginLeft: '10px' }}>
+                                        <IoMdNotifications fontSize={24} />
+                                    </div>
                                 </div>
                             ) : (
                                 <div style={{ display: "flex" }}>

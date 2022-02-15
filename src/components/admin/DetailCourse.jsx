@@ -62,120 +62,125 @@ const DetailCourse = ({ course }) => {
         setCheck1(false);
     }, [course])
     return (
-        <div className="mx-4 my-20 p-2  flex text-black flex" style={{ backgroundColor: '#ff9797' }}>
-            <div className=" h-full text-white">
-                <div style={{ width: '420px', height: '230px' }}>
-                    <img className=" object-cover" alt={course?.name} src={course?.image} style={{ height: '100%', width: '100%' }} />
-                </div>
-                <div className="p-5 flex cursor-pointer">
-                    <div className="font-bold text-xl mr-3">Calendar:</div>
-                    <CalendarTodayIcon sx={{ fontSize: 25 }} onClick={handleOpen} />
-                </div>
-                <div>
-                    <div className="font-bold text-xl mr-3 px-5 cursor-pointer text-white" >
-                        <div className="flex">
-                            <div>
-                                Kiến thức sẽ đạt được sau khóa học:
+        <div className="mx-4 my-20 p-2 text-black" style={{ backgroundColor: '#ebebeb' }}>
+            <div className="font-bold mb-2 text-center text-2xl">Thông tin khóa học</div>
+            <div className="flex w-full">
+                <div className="w-1/2 h-full  ">
+                    <div style={{ width: '420px', height: '230px' }}>
+                        <img className=" object-cover" alt={course?.name} src={course?.image} style={{ height: '100%', width: '100%' }} />
+                    </div>
+                    <div className="p-5 flex cursor-pointer">
+                        <div className="font-bold text-xl mr-3">Calendar:</div>
+                        <CalendarTodayIcon sx={{ fontSize: 25 }} onClick={handleOpen} />
+                    </div>
+                    <div className="w-full">
+                        <div className="font-bold text-xl mr-3 px-5 cursor-pointer  " >
+                            <div className="flex w-full">
+                                <div>
+                                    Kiến thức sẽ đạt được sau khóa học:
+                                </div>
+                                {
+                                    check ? (
+                                        <div onClick={() => setCheck(!check)} className="flex cursor-pointer items-center justify-center ml-2">
+                                            <AiFillCaretDown />
+                                        </div>
+                                    ) : (
+                                        <div onClick={() => setCheck(!check)} className="cursor-pointer items-center justify-center flex ml-2">
+                                            <AiFillCaretUp />
+                                        </div>
+                                    )
+                                }
                             </div>
+                        </div>
+                        <div className="w-full">
                             {
                                 check ? (
-                                    <div onClick={() => setCheck(!check)} className="flex cursor-pointer items-center justify-center ml-2">
-                                        <AiFillCaretDown />
+                                    <div className="pl-6 w-full">
+                                        {
+                                            detailCourse?.Content.map((item, index) => (
+                                                <div>
+                                                    <div key={index} className="flex mb-1">
+                                                        <div className="mt-1 mr-1">
+                                                            <BsCheckLg color="red" />
+                                                        </div>
+                                                        {item}
+                                                    </div>
+                                                </div>
+                                            ))
+                                        }
                                     </div>
-                                ) : (
-                                    <div onClick={() => setCheck(!check)} className="cursor-pointer items-center justify-center flex ml-2">
-                                        <AiFillCaretUp />
-                                    </div>
-                                )
+                                ) : null
                             }
                         </div>
-                    </div>
-                    <div>
-                        {
-                            check ? (
-                                <div className="pl-6">
-                                    {
-                                        detailCourse?.Content.map((item, index) => (
-                                            <div key={index} className="flex w-1/2 mb-1 min-w-max">
-                                                <div className="mt-1 mr-1">
-                                                    <BsCheckLg color="red" />
-                                                </div>
-                                                {item}
-                                            </div>
-                                        ))
-                                    }
+                        <div className="font-bold text-xl mr-3 px-5 cursor-pointer   mt-5" >
+                            <div className="flex">
+                                <div>
+                                    Yêu cầu của khóa học:
                                 </div>
-                            ) : null
-                        }
-                    </div>
-                    <div className="font-bold text-xl mr-3 px-5 cursor-pointer text-white mt-5" >
-                        <div className="flex">
-                            <div>
-                                Yêu cầu của khóa học:
+                                {
+                                    check1 ? (
+                                        <div onClick={() => setCheck1(!check1)} className="flex cursor-pointer items-center justify-center ml-2">
+                                            <AiFillCaretDown />
+                                        </div>
+                                    ) : (
+                                        <div onClick={() => setCheck1(!check1)} className="cursor-pointer items-center justify-center flex ml-2">
+                                            <AiFillCaretUp />
+                                        </div>
+                                    )
+                                }
                             </div>
+                        </div>
+                        <div className="w-full">
                             {
                                 check1 ? (
-                                    <div onClick={() => setCheck1(!check1)} className="flex cursor-pointer items-center justify-center ml-2">
-                                        <AiFillCaretDown />
+                                    <div className="pl-6 w-full">
+                                        {
+                                            detailCourse?.Requirements.map((item, index) => (
+                                                <div key={index} className="flex mb-1">
+                                                    <div className="mt-1 mr-1">
+                                                        <BsCheckLg color="red" />
+                                                    </div>
+                                                    {item}
+                                                </div>
+                                            ))
+                                        }
                                     </div>
-                                ) : (
-                                    <div onClick={() => setCheck1(!check1)} className="cursor-pointer items-center justify-center flex ml-2">
-                                        <AiFillCaretUp />
-                                    </div>
-                                )
+                                ) : null
                             }
                         </div>
                     </div>
+                </div>
+                <div className="pl-4 w-1/2">
                     <div>
-                        {
-                            check1 ? (
-                                <div className="pl-6">
-                                    {
-                                        detailCourse?.Content.map((item, index) => (
-                                            <div key={index} className="flex w-1/2 mb-1 min-w-max">
-                                                <div className="mt-1 mr-1">
-                                                    <BsCheckLg color="red" />
-                                                </div>
-                                                {item}
-                                            </div>
-                                        ))
-                                    }
-                                </div>
-                            ) : null
-                        }
+                        <div>
+                            <div>Name: </div>
+                            <div>
+                                <input value={course?.name} className="text-black w-full p-2 rounded-xl border-2 border-zinc-700" disabled />
+                            </div>
+                        </div>
+                        <div>
+                            <div>Description: </div>
+                            <div>
+                                <textarea value={course?.descriptions} className="text-black w-full p-2 rounded-xl border-2 border-zinc-700 h-40" disabled />
+                            </div>
+                        </div>
+                        <div>
+                            <div>TypeCourse: </div>
+                            <div>
+                                <input value={course?.typeCourse} className="text-black w-full p-2 rounded-xl border-2 border-zinc-700" disabled />
+                            </div>
+                        </div>
+                        <div>
+                            <div>Teacher: </div>
+                            <div>
+                                <input value={course?.teacher.userName} className="text-black w-full p-2 rounded-xl border-2 border-zinc-700" disabled />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div className="pl-4">
-                <div className="font-bold mb-2 text-center">Thông tin khóa học</div>
-                <Box
-                    component="form"
-                    sx={{
-                        '& .MuiTextField-root': { m: 1, width: '70ch', color: 'black' },
-                    }}
-                    autoComplete="true"
-                >
-                    <FormControl >
-                        <div className="mb-4">
-                            <TextField id="outlined-basic" label="Name" value={course?.name} className="text-black" disabled />
-                        </div>
-                        <div className="mb-4">
-                            <TextField id="outlined-basic" label="Type" value={course?.typeCourse} className="text-black" disabled />
-                        </div>
-                        <div className="mb-4 h-auto">
-                            <TextField
-                                id="outlined-multiline-static"
-                                label="Description"
-                                multiline
-                                rows={5}
-                                value={course?.descriptions}
-                                placeholder={course?.descriptions}
-                                disabled
-                            />
-                        </div>
-                    </FormControl>
-                </Box>
-            </div>
+
+
             <div className="p-7">
                 <Modal
                     open={open}

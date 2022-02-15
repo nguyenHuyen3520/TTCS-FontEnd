@@ -23,6 +23,7 @@ const Chat = () => {
     const [text, setText] = useState("");
     const [img, setImg] = useState("");
     const [msgs, setMsgs] = useState([]);
+    const [avatar, setAvatar] = useState(null);
     const profile = JSON.parse(localStorage.getItem('profile'));
     const user1 = profile.uid;
 
@@ -34,7 +35,7 @@ const Chat = () => {
             querySnapshot.forEach((doc) => {
                 users.push(doc.data());
             });            
-            setUsers(users);
+            setUsers(users);            
         });
         return () => unsub();
     }, []);

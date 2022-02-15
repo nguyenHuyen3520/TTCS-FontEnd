@@ -2,40 +2,45 @@ import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import CourseApi from '../api/CourseApi'
 import { BsCheckLg } from "react-icons/bs";
-import Image from '../components/Image';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useHistory } from "react-router-dom"
 const Course = () => {
+    const history = useHistory()
     const [data, setData] = useState({});
     const [isCheck, setIsCheck] = useState(true)
     const path = useParams();
     useEffect(() => {
         const getData = async () => {
             const result = await CourseApi.getCourse(path.id);
-            setData(result.data);            
+            setData(result.data);
             const profile = JSON.parse(localStorage.getItem('profile'));
-            const check = await CourseApi.checkStatus({ Course_id: path.id, User_id: profile.id });            
+            const check = await CourseApi.checkStatus({ Course_id: path.id, User_id: profile.id });
             setIsCheck(check.status);
         }
         getData();
-    }, [])
+    }, [path])
     const handlerSignup = async () => {
         const profile = JSON.parse(localStorage.getItem('profile'));
-        setIsCheck(false);
-        const response = await CourseApi.addUserToCourse({ Course_id: path.id, User_id: profile.id });
-        toast('Đăng ký thành công!', {
-            position: "bottom-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });        
+        if (profile) {
+            setIsCheck(false);
+            const response = await CourseApi.addUserToCourse({ Course_id: path.id, User_id: profile.id });
+            toast('Đăng ký thành công!', {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        } else {
+            history.push("/login")
+            window.location.reload();
+        }
     }
     const handlerDelete = async () => {
-        const profile = JSON.parse(localStorage.getItem('profile'));        
+        const profile = JSON.parse(localStorage.getItem('profile'));
         setIsCheck(true);
         const response = await CourseApi.DeleteUserFromCourse({ Course_id: path.id, User_id: profile.id });
         toast('Hủy Đăng ký thành công!', {
@@ -46,7 +51,7 @@ const Course = () => {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-        });        
+        });
     }
     return (
         <div className="p-12 pt-12 flex">
@@ -57,7 +62,7 @@ const Course = () => {
                 <div className="grid grid-cols-2">
                     {
                         data.resultDetail?.Content.map((item, index) => (
-                            <div key={index} className="flex w-1/2 mb-1 min-w-max">
+                            <div key={index} className="flex w-1/2 mb-1 min-w-full">
                                 <div className="mt-1 mr-1">
                                     <BsCheckLg color="#f58b6c" />
                                 </div>
@@ -70,7 +75,7 @@ const Course = () => {
                 <div className="grid grid-cols-2">
                     {
                         data.resultDetail?.Requirements.map((item, index) => (
-                            <div key={index} className="flex w-1/2 mb-1 min-w-max">
+                            <div key={index} className="flex w-1/2 mb-1 min-w-full">
                                 <div className="mt-1 mr-1">
                                     <BsCheckLg color="#f58b6c" />
                                 </div>

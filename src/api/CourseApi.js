@@ -43,6 +43,10 @@ const CourseApi = {
     changeSchedule: (params) => {
         const url = "/changed-schedule";
         return axiosClient.post(url, params, header);
+    },
+    search: (params) => {
+        const url = "/search?keyword=" + params;
+        return axiosClient.get(url, params);
     }
 }
 

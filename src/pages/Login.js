@@ -101,7 +101,7 @@ const Login = () => {
   return (
     // , background: 'linear-gradient(135deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%)'
     <div className="form" style={{ background: 'rgb(34,193,195)', top: '0px', height: '100%', paddingTop: '150px' }}>
-      <Container style={{ maxWidth: '500px', minWidth: '300px', maxHeight: '700px', width: '30%', height: '60%', margin: 'auto', backgroundColor: '#FFFFFF', borderRadius: '25px', padding: '80px' }}>
+      <Container style={{ maxWidth: '500px', minWidth: '300px', width: '30%', margin: 'auto', backgroundColor: '#FFFFFF', borderRadius: '25px', padding: '80px' }}>
         <div classname=" form_login" style={{}}>
           <h1 className="font-bold text-5xl text-center mb-2">Login</h1>
           <form onSubmit={formik.handleSubmit}>
@@ -145,8 +145,19 @@ const Login = () => {
                 // onFailure={onLoginFailure}
                 cookiePolicy={'single_host_origin'}
                 isSignedIn={true}
-                style={{ width: '100px' }}
+                style={{ width: '100%' }}
               />
+            </div>
+            <div>
+              If you don't have an account,
+              <span
+                onClick={() => {
+                  history.push("/signup")
+                }}
+                className="cursor-pointer text-red-500 font-bold min-w-full"
+              >
+                click here
+              </span>
             </div>
           </form>
         </div>

@@ -19,7 +19,7 @@ const Home = () => {
                 state: undefined,
             });
         }
-    }, [location?.state?.login])
+    }, [location?.state?.login, history, location])
     return (
         <Helmet title="HomePage">
             <div className="Home">

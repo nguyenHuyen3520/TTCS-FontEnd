@@ -17,6 +17,16 @@ const AdminApi = {
         const url = '/admin/list-typeCourses';
         return axiosClient.get(url, header);
     },
+    getDetailCourse: (params) => {
+        const url = '/admin/get-detail-course?Course_id=' + params.Course_id;
+        return axiosClient.get(url, header);
+    },
+    getListUserOfType: (params) => {
+        const url = '/admin/get-list-users?typeUser=' + params.typeUser;
+        return axiosClient.get(url, header);
+    },
+
+
     createCourse: (params) => {
         const url = '/admin/create-course';
         return axiosClient.post(url, params);
@@ -25,10 +35,18 @@ const AdminApi = {
         const url = '/admin/create-user';
         return axiosClient.post(url, params);
     },
+    addSchedule: (params) => {
+        console.log("params", params);
+        const url = "/added-schedule";
+        return axiosClient.post(url, params, header);
+    },
+
+
     deleteUser: (id) => {
         const url = '/admin/delete-user?id=' + id;
         return axiosClient.delete(url, header);
     },
+
     updateUser: (params) => {
         const url = '/admin/update-user';
         return axiosClient.patch(url, params, header);
@@ -37,14 +55,7 @@ const AdminApi = {
         const url = '/admin/update-course';
         return axiosClient.patch(url, params, header);
     },
-    getDetailCourse: (params) => {
-        const url = '/admin/get-detail-course?Course_id=' + params.Course_id;
-        return axiosClient.get(url, header);
-    },
-    getListUserOfType: (params) => {
-        const url = '/admin/get-list-users?typeUser=' + params.typeUser;
-        return axiosClient.get(url, header);
-    }
+
 
 }
 

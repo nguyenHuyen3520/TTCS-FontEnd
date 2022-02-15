@@ -7,7 +7,7 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import { BsFillChatDotsFill } from "react-icons/bs";
 import RefreshContext from '../context/refresh'
 const Navigate = () => {
-    const { pathname } = useLocation()    
+    const { pathname } = useLocation()
     const [links, setLinks] = useState([
         {
             name: "Home",
@@ -23,7 +23,7 @@ const Navigate = () => {
     const activeNav = links.findIndex(e => e?.path === pathname)
 
     const refresh = useContext(RefreshContext);
-        
+
     const [isAdmin, setIsAdmin] = useState(false);
     useEffect(() => {
         const profile = JSON.parse(localStorage.getItem('profile'));
@@ -97,13 +97,13 @@ const Navigate = () => {
         <div className="bg-slate-800 " style={{ minHeight: '100vh' }}>
             {
                 links.map((item, index) => (
-                    <div key={index} className="flex justify-center w-16 p-3 navigate">
+                    <div key={index} className="flex justify-center p-3 navigate__item navigate__none__active">
                         <Link to={item.path}>
-                            <div className={`${index === activeNav ? 'active' : ''} flex p-3`}>
+                            <div className={`${index === activeNav ? 'active' : ''} flex p-3 navigate__icon`}>
                                 <div>
                                     {item.icon}
                                 </div>
-                                <div className="text-white hidden">
+                                <div className="text-white navigate__name">
                                     {item.name}
                                 </div>
                             </div>

@@ -6,9 +6,9 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 
 
 const Course = () => {
-    const [listCourse, setListCourse] = React.useState([]);
-    const [listTypeCourse, setListTypeCourse] = React.useState([]);
-    const [selected, setSelected] = React.useState('All')
+    const [listCourse, setListCourse] = useState([]);
+    const [listTypeCourse, setListTypeCourse] = useState([]);
+    const [selected, setSelected] = useState('All')
     React.useEffect(() => {
         const getData = async () => {
             const response = await AdminApi.getListCourse();

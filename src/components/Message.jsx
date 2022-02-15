@@ -3,7 +3,7 @@ import Moment from "react-moment";
 
 const Message = ({ msg, user1 }) => {
     const scrollRef = useRef();
-
+    console.log("user trong chat", user1)
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [msg]);
@@ -13,7 +13,7 @@ const Message = ({ msg, user1 }) => {
             ref={scrollRef}
         >
             <p className={`${msg.from === user1 ? "me" : "friend"} bg-slate-500`}>
-                {msg.media ? <img src={user1.avatar} alt={msg.text} /> : null}
+                {msg.media ? <img src={msg.media} alt={msg.text} /> : null}
                 {msg.text}
                 <br />
                 <small>

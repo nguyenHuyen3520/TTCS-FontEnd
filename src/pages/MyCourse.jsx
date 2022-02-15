@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import CourseApi from '../api/CourseApi'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Link } from 'react-router-dom'
+import moment from 'moment'
 // Import Swiper styles
 import 'swiper/css';
 
@@ -92,6 +93,7 @@ const MyCourse = () => {
         currentDate: '2022-01-11',
         locale: 'en-US',
     })
+    const [filter, setFilter] = useState(null)
     const [listCourse, setListCourse] = useState([]);
     useEffect(() => {
         const getData = async () => {
@@ -105,9 +107,14 @@ const MyCourse = () => {
                 }
             )
             setListCourse(response.data);
+            const listName = response.data.map((item) => item.name)
+            console.log('listName', listName)
+            setFilter(['All', ...listName])
+            console.log(filter);
+            console.log('response.data', response.data)
         }
         getData();
-    }, [])
+    }, []);
     const { data, currentDate, locale } = state;
     return (
         <div className="p-9">
@@ -150,8 +157,20 @@ const MyCourse = () => {
                     </div>)
             }
             <div>
-                <div className="font-bold text-3xl mt-7 mb-3">
+                <div className="font-bold text-3xl mt-7 mb-3 mr-3">
                     Lịch học của bạn:
+                </div>
+                <div className="flex justify-center items-center mb-3">
+                    <div className="font-bold text-3xl mr-3">
+                        Lọc theo:
+                    </div>
+                    {
+                        filter?.map((item, index) => {
+                            <div className="p-2 rounded-md text-white bg-slate-500 px-4 font-bold text-2xl" key={index}>
+                                {item}
+                            </div>
+                        })
+                    }
                 </div>
                 <div>
                     <div className="shadow-2xl">
@@ -162,7 +181,7 @@ const MyCourse = () => {
                                 height={660}
                             >
                                 <ViewState
-                                    defaultCurrentDate={currentDate}
+                                    defaultCurrentDate={moment(new Date())}
                                 />
                                 <WeekView
                                     startDayHour={7}

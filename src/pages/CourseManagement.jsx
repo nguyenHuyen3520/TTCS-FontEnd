@@ -22,29 +22,8 @@ import {
     Appointments,
     AllDayPanel,
 } from '@devexpress/dx-react-scheduler-material-ui';
+import CreateCourse from '../components/admin/CreateCourse';
 
-const appointments = [
-    {
-        title: "Reactjs",
-        startDate: "2022-01-11T09:45",
-        endDate: "2022-01-11T11:45",
-    },
-    {
-        title: "Reactjs",
-        startDate: "2022-01-13T09:45",
-        endDate: "2022-01-13T11:45",
-    },
-    {
-        title: "Reactjs",
-        startDate: "2022-01-15T09:45",
-        endDate: "2022-01-15T11:45",
-    },
-    {
-        title: "Reactjs",
-        startDate: "2022-01-20T09:45",
-        endDate: "2022-01-20T11:45",
-    },
-]
 
 const allDayLocalizationMessages = {
     'fr-FR': {
@@ -57,8 +36,6 @@ const allDayLocalizationMessages = {
         allDay: 'All Day',
     },
 };
-
-const getAllDayMessages = locale => allDayLocalizationMessages[locale];
 
 const CourseManagement = () => {
     const [listCourse, setListCourse] = React.useState([]);
@@ -101,7 +78,7 @@ const CourseManagement = () => {
         setIsEdit(false);
         setIsDetail(false);
     }
-    const handlerEdit = (value) => {        
+    const handlerEdit = (value) => {
         setIsNew(false);
         setIsEdit(true);
         setIsDetail(false);
@@ -111,7 +88,7 @@ const CourseManagement = () => {
         setIsNew(false);
         setIsEdit(false);
         setIsDetail(true);
-        setCourse(value);        
+        setCourse(value);
     }
     const handlerDelete = (user, index) => {
 
@@ -169,6 +146,9 @@ const CourseManagement = () => {
                 }
                 {
                     isDetail ? (<DetailCourse course={course} />) : null
+                }
+                {
+                    isNew ? (<CreateCourse />) : null
                 }
             </div>
         </div >

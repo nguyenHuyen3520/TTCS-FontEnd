@@ -1,6 +1,6 @@
 import { firepadRef } from "../firebase/firebase";
 import { store } from "../index";
-import { child, update, onValue, push, set } from 'firebase/database'
+import { child, update, push, set, onChildAdded } from 'firebase/database'
 const participantRef = child(firepadRef, 'participant')
 
 export const updatePreference = (userId, preference) => {
@@ -32,7 +32,7 @@ export const createOffer = async (peerConnection, receiverId, createdID) => {
 export const initializeListensers = async (userId) => {
   const currentUserRef = child(participantRef, userId);
 
-  onValue(child(currentUserRef, "offers"), async (snapshot) => {
+  onChildAdded(child(currentUserRef, "offers"), async (snapshot) => {
     const data = snapshot.val();
     if (data?.offer) {
       const pc =
@@ -42,16 +42,15 @@ export const initializeListensers = async (userId) => {
     }
   });
 
-  onValue(child(currentUserRef, "offerCandidates"), (snapshot) => {
+  onChildAdded(child(currentUserRef, "offerCandidates"), (snapshot) => {
     const data = snapshot.val();
-    console.log('data', data)
     if (data.userId) {
       const pc = store.getState().participants[data.userId].peerConnection;
       pc.addIceCandidate(new RTCIceCandidate(data));
     }
   });
 
-  onValue(child(currentUserRef, "answers"), (snapshot) => {
+  onChildAdded(child(currentUserRef, "answers"), (snapshot) => {
     const data = snapshot.val();
     if (data?.answer) {
       const pc =
@@ -61,7 +60,7 @@ export const initializeListensers = async (userId) => {
     }
   });
 
-  onValue(child(currentUserRef, "answerCandidates"), (snapshot) => {
+  onChildAdded(child(currentUserRef, "answerCandidates"), (snapshot) => {
     const data = snapshot.val();
     if (data.userId) {
       const pc = store.getState().participants[data.userId].peerConnection;

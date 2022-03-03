@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import AdminApi from '../api/AdminApi';
 import CourseApi from '../api/CourseApi';
 import { Link, useHistory } from 'react-router-dom'
@@ -38,35 +38,28 @@ const allDayLocalizationMessages = {
 };
 
 const CourseManagement = () => {
-    const [listCourse, setListCourse] = React.useState([]);
-    const [search, setSearch] = React.useState('')
-    React.useEffect(() => {
+    const [listCourse, setListCourse] = useState([]);
+    const [listCourseTemp, setListCourseTemp] = useState([]);
+    const [search, setSearch] = useState('')
+    useEffect(() => {
         const getData = async () => {
             const response = await AdminApi.getListCourse();
             setListCourse(response.data);
+            setListCourseTemp(response.data)
         }
         getData();
     }, []);
-    const handleOnChange = (e) => {
-        setSearch(e.target.value);
-    }
+
     const [course, setCourse] = React.useState({})
     const history = useHistory()
 
-    React.useEffect(() => {
+    useEffect(() => {
+        console.log('search', search)
         if (search === '') {
-            const getData = async () => {
-                // const response = await AdminApi.getListCourse();
-                // setListCourse(response.listUser);
-            }
-            getData();
+            setListCourse(listCourseTemp);
         } else {
-
-            const getSearch = () => {
-                // const newListUser = listCourse.filter((item) => item.userName.includes(search));
-                // setListCourse(newListUser);
-            }
-            getSearch();
+            const newCourse = listCourseTemp.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()));
+            setListCourse(newCourse)
         }
     }, [search])
     const [isNew, setIsNew] = React.useState(false);
@@ -116,7 +109,7 @@ const CourseManagement = () => {
 
                     </div>
                 </div>
-                <input className="inputSearch w-11/12 outline-none border-b py-1 px-2 rounded-sm" style={{ width: '100%', marginTop: '10px', height: '30px', border: 'none' }} placeholder="Enter course" onChange={(e) => handleOnChange(e)} />
+                <input className="inputSearch w-11/12 outline-none border-b py-1 px-2 rounded-sm" style={{ width: '100%', marginTop: '10px', height: '30px', border: 'none' }} placeholder="Enter course" onChange={(e) => setSearch(e.target.value)} value={search} />
                 <div className="MnUser__left__listUser">
                     <div className={`grid grid-cols-3 gap-2`}>
                         {

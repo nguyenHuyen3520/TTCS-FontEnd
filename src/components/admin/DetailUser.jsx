@@ -13,14 +13,13 @@ const DetailUser = ({ user }) => {
         setData(user)
         const getData = async () => {
             const response = await CourseApi.getListMyCourse({ user_id: user._id });
-            console.log("response", response);
             setListCourse(response.data)
         }
         getData();
+        setCheck(true)
     }, [user, refresh])
     const handlerDelete = async (course) => {
         const response = await CourseApi.DeleteUserFromCourse({ Course_id: course._id, User_id: user._id });
-        console.log(response);
         toast('Ban người dùng khỏi khóa học thành công!', {
             position: "bottom-right",
             autoClose: 3000,
@@ -109,7 +108,11 @@ const DetailUser = ({ user }) => {
                                             ))
                                         }
                                     </div>
-                                ) : null
+                                ) : (
+                                    <div className="flex justify-center items-center" >
+                                        Bạn chưa tham gia vào khóa học nào
+                                    </div>
+                                )
                             }
                         </div>
                     </div>

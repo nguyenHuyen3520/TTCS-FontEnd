@@ -1,11 +1,11 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 
 const RefreshContext = createContext();
 
 const RefreshProvider = ({ children }) => {
-    const [active, setActive] = useState(false);
+    // const [active, setActive] = useState(false);
     return (
-        <RefreshContext.Provider value={{ active }}> {children}</RefreshContext.Provider >
+        <RefreshContext.Provider value={true}> {children}</RefreshContext.Provider >
     );
 };
 

@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
-import { getDatabase, ref, set, child, push } from "firebase/database";
+import { getDatabase, ref, child, push } from "firebase/database";
 const firebaseConfig = {
     apiKey: "AIzaSyCqFbDsEBA4EnGora8o2PRNfToshr8EuUQ",
     authDomain: "server-image-b9408.firebaseapp.com",
@@ -20,19 +20,20 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage();
 const database = getDatabase();
-export const userName = 'test';
 
 const profile = JSON.parse(localStorage.getItem('profile'));
+let userName = profile?.userName;
 var firepadRef = ref(database);
 const getMeet = () => {
+    if (!userName) {
+        userName = 'test';
+    }
     const urlparams = new URLSearchParams(window.location.search);
     const roomId = urlparams.get("id");
 
     if (roomId) {
-        console.log('vao 1')
         firepadRef = child(firepadRef, roomId);
     } else {
-        console.log('vao 2')
         firepadRef = push(firepadRef);
         window.history.replaceState(null, "meet", "?id=" + firepadRef.key);
     }
@@ -50,4 +51,4 @@ function logout() {
     return signOut(auth);
 }
 
-export { auth, db, database, storage, logout, app, firepadRef, getMeet };
+export { auth, db, database, storage, logout, app, firepadRef, getMeet, userName };

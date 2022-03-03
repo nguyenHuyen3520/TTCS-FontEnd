@@ -24,8 +24,7 @@ const userApi = {
         return axiosClient.post(url, params);
     },
     getProfile: ()=>{
-        const url = "/profile";
-        console.log(header)
+        const url = "/profile";        
         return axiosClient.get(url, header);
     }
 

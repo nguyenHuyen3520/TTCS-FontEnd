@@ -10,6 +10,14 @@ import { GoogleLogin } from 'react-google-login';
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth, db } from "../firebase/firebase"
 import { setDoc, doc, Timestamp, updateDoc } from "firebase/firestore";
+import {
+  setMainStream,
+  addParticipant,
+  setUser,
+  removeParticipant,
+  updateParticipant,
+} from "../store/actioncreator";
+import { connect } from "react-redux";
 const clientId = "204968990099-vnh6f6s4rgcte95ul3o12qs6polbik4p.apps.googleusercontent.com";
 const validationSchema = yup.object({
   email: yup
@@ -166,5 +174,20 @@ const Login = () => {
     </div>
   );
 };
+const mapStateToProps = (state) => {
+  return {
+    stream: state.mainStream,
+    user: state.currentUser,
+  };
+};
 
-export default Login
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setMainStream: (stream) => dispatch(setMainStream(stream)),
+    addParticipant: (user) => dispatch(addParticipant(user)),
+    setUser: (user) => dispatch(setUser(user)),
+    removeParticipant: (userId) => dispatch(removeParticipant(userId)),
+    updateParticipant: (user) => dispatch(updateParticipant(user)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

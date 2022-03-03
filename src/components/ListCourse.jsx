@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-const ListCourse = ({ listCourse, col }) => {    
+const ListCourse = ({ listCourse, col }) => {
+
     return (
         <div className={`grid grid-cols-6 gap-2`}>
             {
@@ -9,8 +10,22 @@ const ListCourse = ({ listCourse, col }) => {
                         <div className='w-full h-44 bg-cover bg-center' style={{ backgroundImage: `url("${item.image}")` }}>
                         </div>
                         {/* <div className="font-medium p-3 text-purple-50">{item.name}</div> */}
-                        <div className='px-2 text-white py-3'>
-                            <div className='pt-1 pb-8'>{item.name}</div>
+                        <div className='px-2 text-white pt-3'>
+                            <div className='pt-1 pb-2 font-bold text-2xl'>{item.name}</div>
+                            <div >
+                                <div>
+                                    {
+                                        item?.descriptions ? (
+                                            <div>
+                                                {item?.descriptions?.split(' ').slice(0, 15).join(' ').concat('...')}
+                                                <span className="text-red-500">
+                                                    See More
+                                                </span>
+                                            </div>
+                                        ) : null
+                                    }
+                                </div>
+                            </div>
                         </div>
                     </Link>
                 ))

@@ -1,0 +1,7 @@
+.footer__magic {  
+  & > div:hover {
+    width: max-content;
+    border-bottom: 1px solid #000;
+    transition: border-bottom 1s;
+  }
+}

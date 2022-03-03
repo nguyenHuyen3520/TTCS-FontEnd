@@ -47,7 +47,6 @@ const CreateCourse = () => {
             const listCourseType = listCourse.data.map((item) => item.nameType);
             const getListTeacher = await AdminApi.getListUserOfType({ typeUser: 'giao_vien' });
             setListTeacher(getListTeacher.data);
-            console.log('getListTeacher.data', getListTeacher.data)
             setListType(listCourseType);
             setFormData((prevData) => {
                 const newData = { ...prevData, typeCourse: listCourseType[0], teacher_name: getListTeacher?.data[0]?.userName, teacher_id: getListTeacher?.data[0]?._id };
@@ -99,7 +98,7 @@ const CreateCourse = () => {
         }
     }
     return (
-        <div className="mx-4 my-20 p-2  flex " style={{ backgroundColor: '#ff9797' }}>
+        <div className="mx-4 my-20 p-2  flex " style={{ backgroundColor: '#ccc', color: 'black' }}>
             <div className="w-full h-full">
                 <div style={{ width: '420px', height: '230px' }}>
                     {
@@ -122,7 +121,7 @@ const CreateCourse = () => {
                     </div>
                     <input
                         value={formData?.name}
-                        className="border-2 w-full p-2 ml-3"
+                        className="text-black w-full p-2 rounded-xl border-2 border-zinc-700"
                         name="name"
                         onChange={(e) => setFormData((prevData) => {
                             const newData = { ...prevData, name: e.target.value }
@@ -135,7 +134,7 @@ const CreateCourse = () => {
                         Teacher:
                     </div>
                     <div className="p-2">
-                        <select name="typeUser" value={formData.teacher_name} className="p-3 min-w-full" onChange={(e) => setFormData((prevData) => {
+                        <select name="typeUser" value={formData.teacher_name} className="text-black w-full p-2 rounded-xl border-2 border-zinc-700" onChange={(e) => setFormData((prevData) => {
                             const newData = { ...prevData, teacher_name: e.target.value, teacher_id: e.target.name }
                             return newData;
                         })} >
@@ -153,7 +152,7 @@ const CreateCourse = () => {
                     </div>
                     <textarea
                         value={formData?.descriptions}
-                        className="border-2 w-full p-0 ml-3 h-40 overflow-scroll leading-7"
+                        className="text-black w-full p-2 rounded-xl border-2 border-zinc-700"
                         name="Descriptions"
                         onChange={(e) => setFormData((prevData) => {
                             const newData = { ...prevData, descriptions: e.target.value }
@@ -166,7 +165,7 @@ const CreateCourse = () => {
                         typeCourses:
                     </div>
                     <div className="p-2">
-                        <select name="typeUser" value={formData.typeCourse} className="p-3 min-w-full" onChange={(e) => {
+                        <select name="typeUser" value={formData.typeCourse} className="text-black w-full p-2 rounded-xl border-2 border-zinc-700" onChange={(e) => {
                             setFormData((prevData) => {
                                 const newData = { ...prevData, typeCourse: e.target.value }
                                 return newData;

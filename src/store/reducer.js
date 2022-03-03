@@ -77,8 +77,6 @@ export const userReducer = (state = defaultUserState, action) => {
     return state;
   } else if (action.type === UPDATE_USER) {
     let payload = action.payload;
-    console.log('payload', payload);
-    console.log('state', state);
     const userId = Object.keys(state.currentUser)[0];
     updatePreference(userId, payload.currentUser);
     state.currentUser[userId] = {

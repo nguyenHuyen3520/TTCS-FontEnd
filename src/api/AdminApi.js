@@ -35,8 +35,7 @@ const AdminApi = {
         const url = '/admin/create-user';
         return axiosClient.post(url, params);
     },
-    addSchedule: (params) => {
-        console.log("params", params);
+    addSchedule: (params) => {        
         const url = "/added-schedule";
         return axiosClient.post(url, params, header);
     },

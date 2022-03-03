@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import CourseApi from '../api/CourseApi'
 import { BsCheckLg } from "react-icons/bs";
@@ -25,6 +25,7 @@ const Course = () => {
         if (profile) {
             setIsCheck(false);
             const response = await CourseApi.addUserToCourse({ Course_id: path.id, User_id: profile.id });
+            console.log('response', response)
             toast('Đăng ký thành công!', {
                 position: "bottom-right",
                 autoClose: 3000,
@@ -43,6 +44,7 @@ const Course = () => {
         const profile = JSON.parse(localStorage.getItem('profile'));
         setIsCheck(true);
         const response = await CourseApi.DeleteUserFromCourse({ Course_id: path.id, User_id: profile.id });
+        console.log('response', response)
         toast('Hủy Đăng ký thành công!', {
             position: "bottom-right",
             autoClose: 3000,
@@ -85,8 +87,8 @@ const Course = () => {
                     }
                 </div>
             </div>
-            <div className="flex justify-center items-center ml-8">
-                <div className="w-auto h-1/2">
+            <div className="flex justify-center items-center ml-8 w-1/3">
+                <div className="w-full h-1/2">
                     <img className="h-full w-full object-cover" alt={data.resultCourse?.name} src={data.resultCourse?.image} />
                     {
                         isCheck ?

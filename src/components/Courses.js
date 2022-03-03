@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import AdminApi from '../api/AdminApi'
 import ListCourse from './ListCourse';
 import { Listbox, Transition } from '@headlessui/react'
@@ -9,7 +9,7 @@ const Course = () => {
     const [listCourse, setListCourse] = useState([]);
     const [listTypeCourse, setListTypeCourse] = useState([]);
     const [selected, setSelected] = useState('All')
-    React.useEffect(() => {
+    useEffect(() => {
         const getData = async () => {
             const response = await AdminApi.getListCourse();
             setListCourse(response.data);
@@ -22,9 +22,12 @@ const Course = () => {
         getData();
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
+        console.log('listCourse', listCourse)
+    }, [listCourse])
+
+    useEffect(() => {
         const getData = async () => {
-            console.log("===========================")
             const response = await AdminApi.getListCourse();
             if (selected === 'All') {
                 setListCourse(response.data)
@@ -38,7 +41,7 @@ const Course = () => {
         getData();
     }, [selected])
     return (
-        <div className="">
+        <div className="pb-10">
             <div className="mb-8 mt-5 flex justify-center">
                 <div className="w-52 cursor-pointer">
                     typeCourse

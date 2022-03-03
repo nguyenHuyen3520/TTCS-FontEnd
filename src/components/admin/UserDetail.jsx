@@ -35,7 +35,6 @@
 //         validationSchema: validationSchema,
 //         onSubmit: (values) => {
 //             const DetailtUser = async () => {
-//                 console.log(values);
 //                 const response = await AdminApi.updateUser(values);
 //             }
 //             DetailtUser();

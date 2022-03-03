@@ -34,7 +34,7 @@ const User = ({ user1, user, selectUser, chat }) => {
                     ></div>
                 </div>
                 {data && (
-                    <p className="truncate">
+                    <p className="truncate mt-3">
                         <strong>{data.from === user1 ? "Me:" : null}</strong>
                         {data.text}
                     </p>

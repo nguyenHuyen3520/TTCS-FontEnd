@@ -108,34 +108,23 @@ const EditCourse = ({ course }) => {
 
     const commitChanges = async ({ added, changed, deleted }) => {
         setState(async (state) => {
-            console.log("vao 1")
-            console.log("deleted", deleted)
             let { data } = state;
-            console.log("data", data)
             if (added) {
-                console.log("vao 2 added:", added)
-                console.log("start", moment(added.startDate, "YYYY-MM-DD:hh-mm-ss").format().split("").splice(0, 19).join(""))
                 const newDate = {
                     _id: "61ddd050c822712e08211279",
                     title: added.title,
                     startDate: moment(added.startDate, "YYYY-MM-DD:hh-mm-ss").format().split("").splice(0, 19).join(""),
                     endDate: moment(added.endDate, "YYYY-MM-DD:hh-mm-ss").format().split("").splice(0, 19).join(""),
                 };
-                console.log("newDate: ", newDate);
                 setScheduleDataTemp((prevState) => {
                     const newData = prevState.push(newDate)
                     return newData;
                 })
-                console.log("scheduleDataTemp", scheduleDataTemp)
                 const response = await AdminApi.addSchedule({ course_id: course._id, newSchedule: scheduleDataTemp });
-                console.log("response", response)
                 data = response.data;
-                console.log("scheduleDataTemp trong add", data);
-                console.log("response", response);
             }
 
             if (changed) {
-                console.log("vao 3")
                 data = data.map(appointment => (
                     appointment._id === state.editingAppointment._id ? { ...appointment, ...changed.undefined } : appointment
                 ));
@@ -160,8 +149,6 @@ const EditCourse = ({ course }) => {
             }
 
             if (deleted !== undefined) {
-                console.log("vao 4")
-                console.log("vao day va deleted", deleted);
                 data = data.filter(appointment => appointment._id !== deleted);
             }
 
@@ -235,7 +222,7 @@ const EditCourse = ({ course }) => {
         window.location.reload();
     }
     return (
-        <div className="mx-4 my-20 p-2  flex " style={{ backgroundColor: '#ff9797' }}>
+        <div className="mx-4 my-20 p-2  flex " style={{ backgroundColor: '#ccc', color: 'black' }}>
             <div className="w-full h-full">
                 <div style={{ width: '420px', height: '230px' }}>
                     <img className=" object-cover" alt={course?.name} src={photo} />
@@ -258,7 +245,7 @@ const EditCourse = ({ course }) => {
                     </div>
                     <input
                         value={formData?.name}
-                        className="border-2 w-full p-2 ml-3"
+                        className="text-black w-full p-2 rounded-xl border-2 border-zinc-700"
                         name="name"
                         onChange={(e) => setFormData((prevData) => {
                             const newData = { ...prevData, name: e.target.value }
@@ -271,7 +258,7 @@ const EditCourse = ({ course }) => {
                         Teacher:
                     </div>
                     <div className="p-2">
-                        <select name="typeUser" value={formData.teacher_name} className="p-3 min-w-full" onChange={(e) => setFormData((prevData) => {
+                        <select name="typeUser" value={formData.teacher_name} className="text-black w-full p-2 rounded-xl border-2 border-zinc-700" onChange={(e) => setFormData((prevData) => {
                             const newData = { ...prevData, teacher_name: e.target.value, teacher_id: e.target.name }
                             return newData;
                         })} >
@@ -289,7 +276,8 @@ const EditCourse = ({ course }) => {
                     </div>
                     <textarea
                         value={formData?.descriptions}
-                        className="border-2 w-full p-0 ml-3 h-40 overflow-scroll leading-7"
+                        className="text-black w-full p-2 rounded-xl border-2 h-56 border-zinc-700"
+                        // className="border-2 w-full p-0 ml-3 h-40 overflow-scroll leading-7"
                         name="Descriptions"
                         onChange={(e) => setFormData((prevData) => {
                             const newData = { ...prevData, descriptions: e.target.value }
@@ -302,7 +290,7 @@ const EditCourse = ({ course }) => {
                         typeCourses:
                     </div>
                     <div className="p-2">
-                        <select name="typeUser" value={formData.typeCourse} className="p-3 min-w-full" onChange={(e) => {
+                        <select name="typeUser" value={formData.typeCourse} className="text-black w-full p-2 rounded-xl border-2 border-zinc-700" onChange={(e) => {
                             setFormData((prevData) => {
                                 const newData = { ...prevData, typeCourse: e.target.value }
                                 return newData;

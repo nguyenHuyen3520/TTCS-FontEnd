@@ -6,11 +6,9 @@ export default function Profile() {
     const [loading, setLoading] = useState(false);
     const [photoURL, setPhotoURL] = useState("https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png");
 
-    function handleChange(e) {
-        console.log(e.target.files[0])
+    function handleChange(e) {        
         if (e.target.files[0]) {
-            setPhoto(e.target.files[0])
-            console.log(photo)
+            setPhoto(e.target.files[0])            
         }
     }
 

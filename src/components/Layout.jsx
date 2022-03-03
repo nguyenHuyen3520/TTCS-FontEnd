@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 import Header from './Header'
+import Footer from './Footer'
 import Navigate from './Navigate'
 import Routes from '../routes/Routes'
 import { useHistory } from 'react-router-dom';
 import RefreshProvider from '../context/refresh'
+
 const Layout = () => {
     const [profile, setProfile] = useState();
     const path = useHistory()
@@ -18,11 +20,14 @@ const Layout = () => {
                 <div>
                     <Header />
                     <Route render={props => (
-                        <div className="main-content">
-                            <Navigate />
-                            <div className="w-full">
-                                <Routes />
+                        <div>
+                            <div className="main-content">
+                                <Navigate />
+                                <div className="w-full">
+                                    <Routes />
+                                </div>
                             </div>
+                            <Footer />
                         </div>
                     )} />
                 </div>

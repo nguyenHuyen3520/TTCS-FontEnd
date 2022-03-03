@@ -8,13 +8,14 @@ import EditUser from './EditUser';
 import DetailUser from './DetailUser';
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { ToastContainer, toast } from 'react-toastify';
-import { db } from '../../firebase/firebase'
+// import { db } from '../../firebase/firebase'
 import 'react-toastify/dist/ReactToastify.css';
 
 const MnUser = ({ data }) => {
     const [user, setUser] = React.useState({})
     const history = useHistory()
     const [listUser, setListUser] = React.useState([]);
+    const [listUserTemp, setListUserTemp] = React.useState([]);
     const [refresh, setRefresh] = useState(false);
     React.useEffect(() => {
         const getData = async () => {
@@ -27,13 +28,11 @@ const MnUser = ({ data }) => {
         const getData = async () => {
             const response = await AdminApi.getListUser();
             setListUser(response.listUser);
+            setListUserTemp(response.listUser)
         }
         getData();
     }, []);
     const [search, setSearch] = React.useState('')
-    const handleOnChange = (e) => {
-        setSearch(e.target.value);
-    }
     useEffect(() => {
         let result = localStorage.getItem('refresh');
         if (result) {
@@ -41,19 +40,12 @@ const MnUser = ({ data }) => {
         }
     })
     React.useEffect(() => {
+        console.log('search', search)
         if (search === '') {
-            const getData = async () => {
-                const response = await AdminApi.getListUser();
-                setListUser(response.listUser);
-            }
-            getData();
+            setListUser(listUserTemp);
         } else {
-
-            const getSearch = () => {
-                const newListUser = listUser.filter((item) => item.userName.includes(search));
-                setListUser(newListUser);
-            }
-            getSearch();
+            const newListUser = listUserTemp.filter((item) => item.userName.toLowerCase().includes(search.toLowerCase()));
+            setListUser(newListUser);
         }
     }, [search])
     const [isNew, setIsNew] = React.useState(false);
@@ -114,7 +106,7 @@ const MnUser = ({ data }) => {
 
                     </div>
                 </div>
-                <input className="inputSearch w-11/12 outline-none border-b py-1 px-2 rounded-sm" style={{ width: '100%', marginTop: '10px', height: '30px', border: 'none' }} placeholder="Enter user" onChange={(e) => handleOnChange(e)} />
+                <input className="inputSearch w-11/12 outline-none border-b py-1 px-2 rounded-sm" style={{ width: '100%', marginTop: '10px', height: '30px', border: 'none' }} placeholder="Enter user" onChange={(e) => setSearch(e.target.value)} value={search} />
                 <div className="MnUser__left__listUser">
                     {
                         listUser.map((user, index) => (

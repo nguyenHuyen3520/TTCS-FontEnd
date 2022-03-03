@@ -173,7 +173,7 @@ const DetailCourse = ({ course }) => {
                         <div>
                             <div>Teacher: </div>
                             <div>
-                                <input value={course?.teacher.userName} className="text-black w-full p-2 rounded-xl border-2 border-zinc-700" disabled />
+                                <input value={course?.teacher?.userName} className="text-black w-full p-2 rounded-xl border-2 border-zinc-700" disabled />
                             </div>
                         </div>
                     </div>

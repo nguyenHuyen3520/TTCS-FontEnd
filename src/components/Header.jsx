@@ -34,7 +34,7 @@ const Header = () => {
 
     useEffect(async () => {
         const result = await CourseApi.search(keyWord);
-        setListResult(result.data);
+        setListResult(result.data);        
     }, [keyWord])
     const handlerLogout = async () => {
         await updateDoc(doc(db, "users", profile.uid), {
@@ -56,7 +56,7 @@ const Header = () => {
         history.push("/myCourse");
     }
     return (
-        <div style={{ background: 'linear-gradient(120deg, #2980b9, #8e44ad)', color: "#fff" }}>
+        <div style={{ background: 'linear-gradient(120deg, #2980b9, #8e44ad)', color: "#fff", padding: '10px 0' }}>
             <div className="header">
                 <div className="header__left flex ">
                     <div className="mr-2">
@@ -112,11 +112,14 @@ const Header = () => {
                                             My Course
                                         </div>
                                     </button>
-                                    {/* <AccountCircleIcon fontSize="large" /> */}
-                                    <div style={{ height: '35px', width: '35px' }}>
-                                        <img style={{ height: '35px', width: '35px' }} src={profile.avatar} alt={`avatar`} className="rounded-full" />
+                                    <div className="group">
+                                        <div onClick={() => history.push('/editProfile')} className="flex justify-center items-center px-5 hover:border-0 group-hover:border-1 group-hover:bg-neutral-400 group-hover:rounded-md">
+                                            <div style={{ height: '35px', width: '35px', marginRight: '10px' }}>
+                                                <img style={{ height: '35px', width: '35px' }} src={profile.avatar} alt={`avatar`} className="rounded-full" />
+                                            </div>
+                                            <div >{profile.userName}</div>
+                                        </div>
                                     </div>
-                                    <div style={{ margin: "0 10px" }} >{profile.userName}</div>
                                     {
 
                                         profile.isGoogle ? (<button onClick={() => handlerLogout()} style={{ borderRadius: '5px', border: '1px', cursor: 'pointer' }}>

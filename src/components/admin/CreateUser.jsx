@@ -58,7 +58,6 @@ const CreateUser = () => {
                 const newData = { ...prevData, ...values, image: photo };
                 return newData;
             })
-            console.log("dataForm", dataForm);
             const response = await AdminApi.createUser(dataForm);
             if (response.success) {
                 const result = await createUserWithEmailAndPassword(auth, values.email, values.password);
@@ -74,7 +73,6 @@ const CreateUser = () => {
             } else {
                 setErrForm(response.message);
             }
-            console.log("response", response);
             const find = localStorage.getItem('refresh');
             if (find) {
                 localStorage.setItem("refresh", !find);
@@ -93,7 +91,6 @@ const CreateUser = () => {
         },
     });
     function handleChange(e) {
-        console.log("vao handleChange", e.target)
         if (e.target.files[0]) {
             setPhotoTemp(e.target.files[0])
         }

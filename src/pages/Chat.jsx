@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { db, auth, storage } from "../firebase/firebase";
+import { db, storage } from "../firebase/firebase";
 import {
     collection,
     query,
@@ -23,22 +23,22 @@ const Chat = () => {
     const [text, setText] = useState("");
     const [img, setImg] = useState("");
     const [msgs, setMsgs] = useState([]);
-    const [avatar, setAvatar] = useState(null);
+    // const [avatar, setAvatar] = useState(null);
     const profile = JSON.parse(localStorage.getItem('profile'));
     const user1 = profile.uid;
 
     useEffect(() => {
         const usersRef = collection(db, "users");
         const q = query(usersRef, where("uid", "not-in", [user1]));
-        const unsub = onSnapshot(q, (querySnapshot) => {            
+        const unsub = onSnapshot(q, (querySnapshot) => {
             let users = [];
             querySnapshot.forEach((doc) => {
                 users.push(doc.data());
-            });            
-            setUsers(users);            
+            });
+            setUsers(users);
         });
         return () => unsub();
-    }, []);
+    }, [user1]);
 
     const selectUser = async (user) => {
         setChat(user);

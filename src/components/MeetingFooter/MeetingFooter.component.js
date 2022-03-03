@@ -17,7 +17,6 @@ const MeetingFooter = (props) => {
   });
   const micClick = () => {
     setStreamState((currentState) => {
-      console.log('currentState', currentState);
       return {
         ...currentState,
         mic: !currentState.mic,
@@ -27,7 +26,6 @@ const MeetingFooter = (props) => {
 
   const onVideoClick = () => {
     setStreamState((currentState) => {
-      console.log('currentState', currentState);
       return {
         ...currentState,
         video: !currentState.video,

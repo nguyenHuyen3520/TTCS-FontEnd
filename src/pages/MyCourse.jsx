@@ -93,7 +93,7 @@ const MyCourse = () => {
         currentDate: '2022-01-11',
         locale: 'en-US',
     })
-    const [filter, setFilter] = useState(null)
+    // const [filter, setFilter] = useState(null)
     const [listCourse, setListCourse] = useState([]);
     useEffect(() => {
         const getData = async () => {
@@ -107,15 +107,12 @@ const MyCourse = () => {
                 }
             )
             setListCourse(response.data);
-            const listName = response.data.map((item) => item.name)
-            console.log('listName', listName)
-            setFilter(['All', ...listName])
-            console.log(filter);
-            console.log('response.data', response.data)
+            // const listName = response.data.map((item) => item.name)
+            // setFilter(['All', ...listName])
         }
         getData();
     }, []);
-    const { data, currentDate, locale } = state;
+    const { data, locale } = state;
     return (
         <div className="p-9">
             {
@@ -128,8 +125,6 @@ const MyCourse = () => {
                             <Swiper
                                 spaceBetween={50}
                                 slidesPerView={5}
-                            // onSlideChange={() => console.log('slide change')}
-                            // onSwiper={(swiper) => console.log(swiper)}
                             >
                                 {
                                     listCourse.map((item, index) => (
@@ -160,7 +155,7 @@ const MyCourse = () => {
                 <div className="font-bold text-3xl mt-7 mb-3 mr-3">
                     Lịch học của bạn:
                 </div>
-                <div className="flex justify-center items-center mb-3">
+                {/* <div className="flex justify-center items-center mb-3">
                     <div className="font-bold text-3xl mr-3">
                         Lọc theo:
                     </div>
@@ -171,20 +166,20 @@ const MyCourse = () => {
                             </div>
                         })
                     }
-                </div>
+                </div> */}
                 <div>
                     <div className="shadow-2xl">
                         <Paper>
                             <Scheduler
                                 data={data}
                                 locale={locale}
-                                height={660}
+                                height={960}
                             >
                                 <ViewState
                                     defaultCurrentDate={moment(new Date())}
                                 />
                                 <WeekView
-                                    startDayHour={7}
+                                    startDayHour={9}
                                     endDayHour={22}
                                     timeTableCellComponent={TimeTableCell}
                                     dayScaleCellComponent={DayScaleCell}

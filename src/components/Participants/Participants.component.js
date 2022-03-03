@@ -11,7 +11,7 @@ const Participants = (props) => {
       videoRef.current.srcObject = props.stream;
       videoRef.current.muted = true;
     }
-  }, [props.currentUser, props.stream]);
+  }, [props.currentUser, props.stream, videoRef]);
 
   const currentUser = props.currentUser
     ? Object.values(props.currentUser)[0]
@@ -83,7 +83,7 @@ const Participants = (props) => {
         currentParticipant={currentUser}
         curentIndex={participantKey.length}
         hideVideo={screenPresenter && !currentUser.screen}
-        videoRef={videoRef}
+        ref={videoRef}
         showAvatar={currentUser && !currentUser.video && !currentUser.screen}
         currentUser={true}
       />
